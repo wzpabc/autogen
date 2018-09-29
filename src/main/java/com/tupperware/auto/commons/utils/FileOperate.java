@@ -155,6 +155,7 @@ public class FileOperate {
 
 	public static boolean deleteFile(String strPath) {
 		File file = new File(strPath.trim());
+		System.out.println("preparing to delete file "+strPath);
 		if (file.exists()) {
 			System.out.println("delete file is unsuccessful(FileOperate.deleteFile())");
 			return file.delete();

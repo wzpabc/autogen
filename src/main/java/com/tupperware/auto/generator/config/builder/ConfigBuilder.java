@@ -39,6 +39,7 @@ import com.tupperware.auto.generator.config.StrategyConfig;
 import com.tupperware.auto.generator.config.rules.DbType;
 import com.tupperware.auto.generator.config.rules.NamingStrategy;
 import com.tupperware.auto.generator.config.rules.QuerySQL;
+import org.apache.log4j.Logger;
 
 /**
  * 配置汇总 传递给文件生成工具
@@ -48,6 +49,7 @@ import com.tupperware.auto.generator.config.rules.QuerySQL;
  */
 public class ConfigBuilder {
 
+	private static Logger logger = Logger.getLogger(ConfigBuilder.class);
 	/**
 	 * SQL连接
 	 */
@@ -429,6 +431,7 @@ public class ConfigBuilder {
 		PreparedStatement pstate = null;
 		try {
 			pstate = connection.prepareStatement(querySQL.getTableCommentsSql());
+			logger.info(querySQL.getTableCommentsSql());
 			ResultSet results = pstate.executeQuery();
 			while (results.next()) {
 				String tableName = results.getString(querySQL.getTableName());

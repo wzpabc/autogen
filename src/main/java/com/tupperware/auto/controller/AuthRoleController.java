@@ -1,5 +1,6 @@
 package com.tupperware.auto.controller;
 
+import com.tupperware.auto.commons.utils.PageInfo;
 import com.tupperware.auto.form.AuthRoleHelper;
 
 import com.tupperware.auto.commons.base.CommonController;
@@ -16,6 +17,7 @@ import com.tupperware.auto.commons.utils.WebUtils;
 import com.tupperware.auto.commons.utils.DataInfo;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -26,8 +28,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import com.tupperware.auto.mysql.model.AuthRole;
-import com.tupperware.auto.service.IAuthRoleService; 
-
+import com.tupperware.auto.service.IAuthRoleService;
+import org.springframework.ui.Model;
 import springfox.documentation.annotations.ApiIgnore;
 /**
  * <p>
@@ -54,7 +56,7 @@ public class AuthRoleController  extends CommonController<AuthRole>{
 
 	@ApiOperation(value = "查询", notes = "按表头中列出的字段名等值过滤,不支持日期过滤", response = DataInfo.class,produces="application/json")
 	@ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input", response = DataInfo.class) })
-	   @RequestMapping(value="/query", method = RequestMethod.POST)
+	@RequestMapping(value="/query", method = RequestMethod.POST)
 	@ResponseBody
 	public DataInfo query(HttpServletRequest request){
 		Map<String, String> map = WebUtils.Requst2Map(request);
@@ -66,7 +68,54 @@ public class AuthRoleController  extends CommonController<AuthRole>{
 		datainfo.setStatus(true);
 		datainfo.setCode(HttpServletResponse.SC_OK);
 		return datainfo; 		
-	} 
-	
-	
+	}
+
+	@ApiOperation(value = "视图", notes = "视图", response = PageInfo.class,produces="application/json")
+	@ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input", response = PageInfo.class) })
+	@RequestMapping(value="/datagrid", method = RequestMethod.POST)
+	@ResponseBody
+	public PageInfo dataGrid(AuthRoleHelper helper) {
+		PageInfo pageInfo = new PageInfo(helper.getPage(), helper.getRows());
+		Map<String, Object> condition = new HashMap<String, Object>();
+		pageInfo.setCondition(condition);
+		authRoleService.setHelper(helper);
+		authRoleService.selectDataGrid(pageInfo);
+		return pageInfo;
+	}
+
+
+
+	@RequestMapping(value="/addPage", method = RequestMethod.GET)
+	public String addPage() {
+		return "admin/roleAdd";
+	}
+
+	@RequestMapping(value="/add", method = RequestMethod.POST)
+	@ResponseBody
+	public Object add(AuthRole obj) {
+		authRoleService.insert(obj	);
+		return renderSuccess("添加成功！");
+	}
+
+	@RequestMapping(value="/delete", method = RequestMethod.DELETE)
+	@ResponseBody
+	public Object delete(Long id) {
+//		authRoleService.delete();
+		return renderSuccess("删除成功！");
+	}
+
+	@RequestMapping(value="/editPage", method = RequestMethod.GET)
+	public String editPage(Model model, Long id) {
+		//Role role = roleService.selectById(id);
+		// model.addAttribute("role", role);
+		return "admin/roleEdit";
+	}
+
+	@RequestMapping(value="/edit", method = RequestMethod.POST)
+	@ResponseBody
+	public Object edit(AuthRole role) {
+		// roleService.updateById(role);
+		return renderSuccess("编辑成功！");
+	}
+
 } 

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.tupperware.auto.commons.utils.FileOperate;
 import com.tupperware.auto.generator.config.ConstVal;
 import com.tupperware.auto.generator.config.TemplateConfig;
 import com.tupperware.auto.generator.config.builder.ConfigBuilder;
@@ -56,6 +57,23 @@ public class AutoGenerator extends AbstractGenerator {
 	 */
 	private VelocityEngine engine;
 
+	/**
+	 * 生成代码
+	 */
+	public void clear() {
+		logger.debug("==========================准备生成文件...==========================");
+		// 初始化配置
+		initConfig();
+		// 创建输出文件路径
+		mkdirs(config.getPathInfo());
+		// 获取上下文
+		Map<String, VelocityContext> ctxData = analyzeData(config);
+		// 循环生成文件
+		for (Map.Entry<String, VelocityContext> ctx : ctxData.entrySet()) {
+			batchClear(ctx.getKey(), ctx.getValue());
+		}
+		logger.debug("==========================已清理！！！==========================");
+	}
 	/**
 	 * 生成代码
 	 */
@@ -246,6 +264,70 @@ public class AutoGenerator extends AbstractGenerator {
 		}
 	}
 
+
+
+	/**
+	 * 合成上下文与模板
+	 *
+	 * @param context
+	 *            vm上下文
+	 */
+	private void batchClear(String entityName, VelocityContext context) {
+		 	TableInfo tableInfo = (TableInfo) context.get("table");
+			Map<String, String> pathInfo = config.getPathInfo();
+			String entityFile = String.format((pathInfo.get(ConstVal.ENTITY_PATH) + ConstVal.ENTITY_NAME), entityName);
+			String mapperFile = String.format((pathInfo.get(ConstVal.MAPPER_PATH) + File.separator + tableInfo.getMapperName() + ConstVal.JAVA_SUFFIX), entityName);
+			String xmlFile = String.format((pathInfo.get(ConstVal.XML_PATH) + File.separator + tableInfo.getXmlName() + ConstVal.XML_SUFFIX), entityName);
+
+			String serviceFile = String.format((pathInfo.get(ConstVal.SERIVCE_PATH) + File.separator + tableInfo.getServiceName() + ConstVal.JAVA_SUFFIX), entityName);
+			String implFile = String.format((pathInfo.get(ConstVal.SERVICEIMPL_PATH) + File.separator + tableInfo.getServiceImplName() + ConstVal.JAVA_SUFFIX), entityName);
+			String controllerFile = String.format((pathInfo.get(ConstVal.CONTROLLER_PATH) + File.separator + tableInfo.getControllerName() + ConstVal.JAVA_SUFFIX), entityName);
+
+//			String listFile = String.format((pathInfo.get(ConstVal.LIST_PATH) + File.separator + tableInfo.getListName() + ConstVal.JSP_SUFFIX), entityName);
+//			String addFile = String.format((pathInfo.get(ConstVal.ADD_PATH) + File.separator + tableInfo.getAddName() + ConstVal.JSP_SUFFIX), entityName);
+//			String editFile = String.format((pathInfo.get(ConstVal.EDIT_PATH) + File.separator + tableInfo.getEditName() + ConstVal.JSP_SUFFIX), entityName);
+			String formFile = String.format((pathInfo.get(ConstVal.FORM_PATH) + File.separator + tableInfo.getFormName() + ConstVal.JAVA_SUFFIX), entityName);
+//			String sqlFile = String.format((pathInfo.get(ConstVal.SQL_PATH) + File.separator + tableInfo.getSqlName() + ConstVal.SQL_SUFFIX), entityName);
+//
+			TemplateConfig template = config.getTemplate();
+
+			// 根据override标识来判断是否需要创建文件
+			if (isCreate(entityFile)) {
+				FileOperate.deleteFile(entityFile);
+
+			}
+			if (isCreate(mapperFile)) {
+				FileOperate.deleteFile(mapperFile);
+			}
+			if (isCreate(xmlFile)) {
+				FileOperate.deleteFile(xmlFile);
+			}
+			if (isCreate(serviceFile)) {
+				FileOperate.deleteFile(serviceFile);
+			}
+			if (isCreate(implFile)) {
+				FileOperate.deleteFile( implFile);
+			}
+			if (isCreate(controllerFile)) {
+				FileOperate.deleteFile( controllerFile);
+			}
+//			if (isCreate(listFile)) {
+//			FileOperate.deleteFile( listFile);
+//			}
+//			if (isCreate(addFile)) {
+//			FileOperate.deleteFile( addFile);
+//			}
+//			if (isCreate(editFile)) {
+//			FileOperate.deleteFile( editFile);
+//			}
+			if (isCreate(formFile)) {
+				FileOperate.deleteFile( formFile);
+			}
+//			if (isCreate(sqlFile)) {
+//				vmToFile(context, template.getSql(), sqlFile);
+//			}
+
+	}
 	/**
 	 * 将模板转化成为文件
 	 *

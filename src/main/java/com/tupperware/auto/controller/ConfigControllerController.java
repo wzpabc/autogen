@@ -67,6 +67,7 @@ public class ConfigControllerController  extends CommonController<ConfigControll
 		datainfo.setCode(HttpServletResponse.SC_OK);
 		return datainfo; 		
 	} 
-	
+
+
 	
 } 

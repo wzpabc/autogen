@@ -18,6 +18,9 @@ import java.util.Properties;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class Generator {
+
+    private  AutoGenerator mpg;
+
     private Properties props;
     // 全局配置
     private GlobalConfig gc;
@@ -39,6 +42,7 @@ public class Generator {
         setPackageConfig();
         setInjectionConfig();
         setTemplateConfig();
+        setAutoGenerator();
     }
 
     private void setDataSourceConfig() {
@@ -175,9 +179,8 @@ public class Generator {
         };
     }
 
-    @Test
-    public void run() {
-        AutoGenerator mpg = new AutoGenerator();
+    private void setAutoGenerator(){
+        mpg = new AutoGenerator();
 
         mpg.setGlobalConfig(gc);
         // 数据源配置
@@ -192,6 +195,18 @@ public class Generator {
         mpg.setTemplate(tc);
         // 执行生成
         mpg.execute();
+    }
+    @Test
+    public void execute() {
+        // 执行生成
+        mpg.execute();
+        // 打印注入设置
+        System.err.println(mpg.getCfg().getMap().get("abc"));
+    }
+    @Test
+    public void clear() {
+        // 执行生成
+        mpg.clear();
         // 打印注入设置
         System.err.println(mpg.getCfg().getMap().get("abc"));
     }
