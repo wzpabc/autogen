@@ -131,7 +131,7 @@ public class Generator {
         // 包配置
         pc = new PackageConfig();
         pc.setParent("com.tupperware.auto");
-        pc.setResource("resources".replaceAll("###",dbtype.toLowerCase()));
+//        pc.setResource("resources".replaceAll("###",dbtype.toLowerCase()));
         pc.setModuleName(null); // 所属模块
         pc.setController("controller");
         pc.setForm("form");
