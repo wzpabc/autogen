@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tupperware.auto.mysql.mapper.IFileMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.tupperware.auto.mysql.model.IFile">
+		<id column="id" property="id" /> 
+		<result column="filename" property="filename" /> 
+		<result column="nowname" property="nowname" /> 
+		<result column="savepath" property="savepath" /> 
+		<result column="url" property="url" /> 
+		<result column="filetype" property="filetype" /> 
+		<result column="filesize" property="filesize" /> 
+		<result column="addtime" property="addtime" /> 
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, filename, nowname, savepath, url, filetype, filesize, addtime
+    </sql>
+    
+    
+
+<select id="selectByMapParam" resultMap="BaseResultMap" parameterType="Map" >
+    select  
+    	<include refid="Base_Column_List" />
+   	 from dbo.i_file WHERE 1=1     
+    	 <if test="id != null" > and  id = #{id,jdbcType=INT(11)} </if> 
+		 <if test="filename != null" > and  filename = #{filename,jdbcType=VARCHAR(255)} </if> 
+		 <if test="nowname != null" > and  nowname = #{nowname,jdbcType=VARCHAR(255)} </if> 
+		 <if test="savepath != null" > and  savepath = #{savepath,jdbcType=VARCHAR(255)} </if> 
+		 <if test="url != null" > and  url = #{url,jdbcType=VARCHAR(255)} </if> 
+		 <if test="filetype != null" > and  filetype = #{filetype,jdbcType=VARCHAR(255)} </if> 
+		 <if test="filesize != null" > and  filesize = #{filesize,jdbcType=BIGINT(20)} </if> 
+		 <if test="addtime != null" > and  addtime = #{addtime,jdbcType=TIMESTAMP} </if> 
+	  </select>
+  
+  <select id="selectIFileList" resultType="IFile">
+        select
+        <include refid="Base_Column_List"/>
+        from dbo.i_file
+        order by ${sort} ${order}
+    </select>
+    
+    <select id="selectTopIFile" resultType="IFile">
+        select top ${n} 
+        <include refid="Base_Column_List"/>
+        from dbo.i_file
+    </select>
+    
+    <select id="getByFilter" resultType="IFile">
+        select top 1 
+        <include refid="Base_Column_List"/>
+        from dbo.i_file 
+        where 1=1
+        <!--    and organno=${organno}
+				and year=${year}
+				and month=${month}
+				and week=${week}
+				and date=2018-09-29
+				and organtype=${organtype} -->
+    </select>
+    
+</mapper>
+ 

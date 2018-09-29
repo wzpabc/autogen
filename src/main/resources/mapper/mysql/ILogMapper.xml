@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tupperware.auto.mysql.mapper.ILogMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.tupperware.auto.mysql.model.ILog">
+		<id column="id" property="id" /> 
+		<result column="username" property="username" /> 
+		<result column="type" property="type" /> 
+		<result column="url" property="url" /> 
+		<result column="method" property="method" /> 
+		<result column="params" property="params" /> 
+		<result column="requestip" property="requestip" /> 
+		<result column="description" property="description" /> 
+		<result column="detail" property="detail" /> 
+		<result column="oper_date" property="operDate" /> 
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, username, type, url, method, params, requestip, description, detail, oper_date AS operDate
+    </sql>
+    
+    
+
+<select id="selectByMapParam" resultMap="BaseResultMap" parameterType="Map" >
+    select  
+    	<include refid="Base_Column_List" />
+   	 from dbo.i_log WHERE 1=1     
+    	 <if test="id != null" > and  id = #{id,jdbcType=INT(11)} </if> 
+		 <if test="username != null" > and  username = #{username,jdbcType=VARCHAR(255)} </if> 
+		 <if test="type != null" > and  type = #{type,jdbcType=TINYINT(4)} </if> 
+		 <if test="url != null" > and  url = #{url,jdbcType=VARCHAR(255)} </if> 
+		 <if test="method != null" > and  method = #{method,jdbcType=VARCHAR(255)} </if> 
+		 <if test="params != null" > and  params = #{params,jdbcType=TEXT} </if> 
+		 <if test="requestip != null" > and  requestip = #{requestip,jdbcType=VARCHAR(255)} </if> 
+		 <if test="description != null" > and  description = #{description,jdbcType=VARCHAR(255)} </if> 
+		 <if test="detail != null" > and  detail = #{detail,jdbcType=TEXT} </if> 
+		 <if test="operDate != null" > and  oper_date = #{operDate,jdbcType=TIMESTAMP} </if> 
+	  </select>
+  
+  <select id="selectILogList" resultType="ILog">
+        select
+        <include refid="Base_Column_List"/>
+        from dbo.i_log
+        order by ${sort} ${order}
+    </select>
+    
+    <select id="selectTopILog" resultType="ILog">
+        select top ${n} 
+        <include refid="Base_Column_List"/>
+        from dbo.i_log
+    </select>
+    
+    <select id="getByFilter" resultType="ILog">
+        select top 1 
+        <include refid="Base_Column_List"/>
+        from dbo.i_log 
+        where 1=1
+        <!--    and organno=${organno}
+				and year=${year}
+				and month=${month}
+				and week=${week}
+				and date=2018-09-29
+				and organtype=${organtype} -->
+    </select>
+    
+</mapper>
+ 

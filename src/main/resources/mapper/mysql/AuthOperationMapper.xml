@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tupperware.auto.mysql.mapper.AuthOperationMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.tupperware.auto.mysql.model.AuthOperation">
+		<id column="opid" property="opid" /> 
+		<result column="opcode" property="opcode" /> 
+		<result column="opname" property="opname" /> 
+		<result column="ophref" property="ophref" /> 
+		<result column="opseq" property="opseq" /> 
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        opid, opcode, opname, ophref, opseq
+    </sql>
+    
+    
+
+<select id="selectByMapParam" resultMap="BaseResultMap" parameterType="Map" >
+    select  
+    	<include refid="Base_Column_List" />
+   	 from dbo.auth_operation WHERE 1=1     
+    	 <if test="opid != null" > and  opid = #{opid,jdbcType=INT(11)} </if> 
+		 <if test="opcode != null" > and  opcode = #{opcode,jdbcType=VARCHAR(20)} </if> 
+		 <if test="opname != null" > and  opname = #{opname,jdbcType=VARCHAR(50)} </if> 
+		 <if test="ophref != null" > and  ophref = #{ophref,jdbcType=VARCHAR(200)} </if> 
+		 <if test="opseq != null" > and  opseq = #{opseq,jdbcType=INT(11)} </if> 
+	  </select>
+  
+  <select id="selectAuthOperationList" resultType="AuthOperation">
+        select
+        <include refid="Base_Column_List"/>
+        from dbo.auth_operation
+        order by ${sort} ${order}
+    </select>
+    
+    <select id="selectTopAuthOperation" resultType="AuthOperation">
+        select top ${n} 
+        <include refid="Base_Column_List"/>
+        from dbo.auth_operation
+    </select>
+    
+    <select id="getByFilter" resultType="AuthOperation">
+        select top 1 
+        <include refid="Base_Column_List"/>
+        from dbo.auth_operation 
+        where 1=1
+        <!--    and organno=${organno}
+				and year=${year}
+				and month=${month}
+				and week=${week}
+				and date=2018-09-29
+				and organtype=${organtype} -->
+    </select>
+    
+</mapper>
+ 
