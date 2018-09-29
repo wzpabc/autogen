@@ -1,0 +1,37 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+import ${superServiceClassPackage};
+import com.tupperware.auto.form.${entity}Helper;
+import com.tupperware.auto.commons.utils.DataInfo;
+import com.tupperware.auto.commons.utils.PageInfo;
+import com.baomidou.mybatisplus.service.IService;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * <p>
+ * ${table.comment}  服务类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+	 
+	void setHelper(${entity}Helper helper);
+
+	void selectDataGrid(PageInfo pageInfo);
+	
+	List<${entity}> getJson(String outletNo,String yearMonth)  ;
+	
+	List<${entity}> getByFilter(String organno, String year, String month, String week, String date,
+			String organtype);
+	
+	void selectDataGrid(DataInfo dataInfo);
+	
+	${entity} getTop1();
+	
+	public List<${entity}> getMapParams(Map<String, String> params) ;
+	
+}

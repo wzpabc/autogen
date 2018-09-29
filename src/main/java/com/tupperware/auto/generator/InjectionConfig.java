@@ -1,0 +1,78 @@
+/**
+ * Copyright (c) 2011-2020, hubin (jobob@qq.com).
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package com.tupperware.auto.generator;
+
+import java.util.Map;
+
+import com.tupperware.auto.generator.config.builder.ConfigBuilder;
+
+/**
+ * <p>
+ * 抽象的对外接口
+ * </p>
+ *
+ * @author hubin
+ * @since 2016-12-07
+ */
+public abstract class InjectionConfig {
+
+	/**
+	 * 全局配置
+	 */
+	private ConfigBuilder config;
+	private Map<String, Object> map;
+	
+//	private List<ControllerGenerator> controller;
+
+	/**
+	 * 注入自定义 Map 对象
+	 */
+	public abstract void initMap();
+	
+	public abstract void initMap(String table);
+
+	public ConfigBuilder getConfig() {
+		return config;
+	}
+
+	public ConfigBuilder getConfig(String entityName) {
+		return config;
+	}
+
+	public void setConfig(ConfigBuilder config) {
+		this.config = config;
+	}
+
+	public Map<String, Object> getMap() {
+		return map;
+	}
+
+	public void setMap(Map<String, Object> map) {
+		this.map = map;
+	}
+
+//	public List<ControllerGenerator> getController() {
+//		return controller;
+//	}
+//
+//	public void setController(List<ControllerGenerator> controller) {
+//		this.controller = controller;
+//	}
+
+ 
+	
+
+}

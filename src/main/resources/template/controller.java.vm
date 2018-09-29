@@ -1,0 +1,181 @@
+package ${package.Controller};
+
+import com.tupperware.auto.form.${entity}Helper;
+
+import com.tupperware.auto.commons.base.CommonController;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.tupperware.auto.commons.utils.WebUtils;
+import com.tupperware.auto.commons.utils.DataInfo;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import ${package.Entity}.${entity};
+import ${package.Service}.${table.serviceName}; 
+
+import springfox.documentation.annotations.ApiIgnore;
+/**
+ * <p>
+ * ${table.comment}  前端控制器
+ * </p>
+ * @author ${author}
+ * @since ${date}
+ */
+ 
+#if($cfg)
+
+#foreach($controller in $cfg )
+#if(${velocityCount}==1)
+@Api(description= "${controller.controller.tableDesc}" ,tags={"${controller.controller.groupId}.${table.entityPath}"}) 
+#end    
+#end
+#else
+@Api(description= "${table.comment}" ,tags={"${table.entityPath}"}) 
+#end
+@RestController
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/${table.entityPath}")
+#if(${superControllerClass})
+//public class ${table.controllerName} extends ${superControllerClass} {
+public class ${table.controllerName} extends CommonController<${entity}> {
+#else
+public class ${table.controllerName}  extends CommonController<${entity}>{
+#end
+	
+	private static Logger logger = Logger.getLogger(${table.controllerName}.class);
+	
+	@Autowired private ${table.serviceName} ${table.entityPath}Service;
+#if(1==2)
+	@ApiIgnore 
+    @ApiOperation(value = "例子", notes = "返回测试数据",produces="application/json")
+	@RequestMapping(value = "/sample", method = RequestMethod.GET)
+	@ResponseBody
+	public DataInfo sample() {
+    	logger.info("=========================数据样本================================");
+		DataInfo datainfo = new DataInfo("test",  "week", "ol");
+		List<${entity}> list=new ArrayList<${entity}>();
+		list.add(${table.entityPath}Service.getTop1());
+		datainfo.setTotal(list.size());
+		datainfo.setMessage("${table.comment}");
+		datainfo.setStatus(true);
+		datainfo.setCode(HttpServletResponse.SC_OK);
+		datainfo.setRows(list);
+		return datainfo; 	
+	}
+	
+	@ApiIgnore
+	@ApiOperation(value = "下载", notes = "下载query中的结果",produces="application/json")
+	@RequestMapping(value="/download", method = RequestMethod.POST)
+	@ResponseBody
+	public void download(HttpServletRequest request){
+		Map<String, String> map = WebUtils.Requst2Map(request); 
+		downloadExcel(${table.entityPath}Service.getMapParams(map),${entity}.class);
+	} 
+	
+	@ApiIgnore
+	@ApiOperation(value = "机构编码查询", notes = "按专卖店、分销商编码查询",produces="application/json")
+	@RequestMapping(value = "/query/{year}/{month}/{week}/{date}/{organtype}/{organno}", method = RequestMethod.POST)
+	public DataInfo getByFilter(@PathVariable String organno, @PathVariable String year, @PathVariable String month,
+			@PathVariable String week, @PathVariable String date, @PathVariable String organtype) {
+		DataInfo datainfo = new DataInfo(organno, month, "OL");
+		List<${entity}> list = ${table.entityPath}Service.getByFilter(organno, year, month, week, date, organtype);
+		datainfo.setTotal(list.size());
+		datainfo.setMessage("${table.comment}");
+		datainfo.setRows(list);
+		datainfo.setStatus(true);
+		datainfo.setCode(HttpServletResponse.SC_OK);
+		return datainfo;
+	}	
+#end
+	@ApiOperation(value = "表头", notes = "表头",produces="application/json")
+	@RequestMapping(value = "/header", method = RequestMethod.GET)
+	@ResponseBody 
+	public Map<String, String> header() { 
+		return ${entity}Helper.getHeader();
+	}
+
+	@ApiOperation(value = "查询", notes = "按表头中列出的字段名等值过滤,不支持日期过滤", response = DataInfo.class,produces="application/json")
+	@ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input", response = DataInfo.class) })
+	   @RequestMapping(value="/query", method = RequestMethod.POST)
+	@ResponseBody
+	public DataInfo query(HttpServletRequest request){
+		Map<String, String> map = WebUtils.Requst2Map(request);
+		DataInfo datainfo = new DataInfo(map.get("aban8"),  "", "");
+		List<${entity}> list=${table.entityPath}Service.getMapParams(map);
+		datainfo.setTotal(list.size());
+		datainfo.setMessage("${table.comment}");
+		datainfo.setRows(list);		
+		datainfo.setStatus(true);
+		datainfo.setCode(HttpServletResponse.SC_OK);
+		return datainfo; 		
+	} 
+	
+#foreach($controller in $cfg )      
+	
+    /** ${controller.controller.notes}
+	 * @param ${controller.paramStr}
+	 * @return DataInfo
+	 * @see DataInfo
+	 */
+#if( ${controller.controller.auth}==1)
+
+ 	@ApiImplicitParams({
+		@ApiImplicitParam(name = "authorization", value = "authorization", required = ${controller.controller.require}, dataType = "string", paramType = "header")
+   })  	
+#end
+
+#if( ${controller.controller.ignore}==1)
+    @ApiIgnore
+#end
+	@ApiOperation(value = "${controller.controller.apiValue}",tags={$!{controller.controller.flag}}, notes = "${controller.h1}${controller.controller.notes}  \n${controller.h1}参数:  \n${controller.paramValue}  \n ${controller.h1}查询${controller.controller.id}:  \n${controller.plaintext}",produces="${controller.controller.producers}")
+    @RequestMapping(value = "/${controller.controller.requestPath}", method = RequestMethod.${controller.controller.requestMethod})
+    public DataInfo ${controller.controller.functionName}( 
+#foreach($param in ${controller.params})
+         @RequestParam(value = "${param.name}${param.endfix}", required = ${controller.controller.require})String ${param.name}${param.endfix} ${param.seperator} 
+#end    
+	) {		
+#if(${controller.controller.construct}=="yes")
+		DataInfo datainfo = new DataInfo( ${controller.paramData});
+#else
+		DataInfo datainfo = new DataInfo("","","");
+#end		
+		EntityWrapper<${entity}> ew = new EntityWrapper<>();
+		ew.setEntity(new ${entity}());
+#foreach($param in ${controller.params})
+        ew.and("${param.column} ${param.operator} {0}", ${param.name}${param.endfix}); //${param.value}
+#end
+#if(${controller.orderColumn}!=""&&${controller.orderColumn})
+		ew.orderBy("${controller.orderColumn}");
+#end
+
+		logger.info(ew.getSqlSegment());
+		
+		List<${entity}> list= ${table.entityPath}Service.selectList(ew);	
+		datainfo.setTotal(list.size());
+		datainfo.setMessage("${controller.controller.apiValue}");
+		datainfo.setRows(list);
+		datainfo.setStatus(true);
+		datainfo.setCode(HttpServletResponse.SC_OK);		
+		datainfo.setSqlSegment(ew.getSqlSegment()); 
+		logger.info(datainfo.toString());
+		
+		return datainfo; 	 
+    }
+   
+    #end  
+	
+} 

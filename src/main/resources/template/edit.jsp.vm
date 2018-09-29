@@ -1,0 +1,95 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/commons/global.jsp" %>
+<script type="text/javascript">
+    $(function() {
+        $('#${table.entityPath}EditForm').form({
+            url : '${path}/${table.entityPath}/edit',
+            onSubmit : function() {
+                progressLoad();
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    progressClose();
+                }
+                return isValid;
+            },
+            success : function(result) {
+                progressClose();
+                result = $.parseJSON(result);
+                if (result.success) {
+                    parent.$.modalDialog.openner_dataGrid.datagrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
+                    parent.$.modalDialog.handler.dialog('close');
+                } else {
+                    parent.$.messager.alert('错误', result.msg, 'error');
+                }
+            }
+        });
+         
+        
+    });
+    
+    
+     var isdisable="disabled";
+	//表间提交
+	function ${table.entityPath}EditSubmit() { 	
+		$('#${table.entityPath}EditForm').submit(); 		
+		//toggleInputs();	
+	}
+	 
+	function toggleInputs() {
+		 var inputs = $("#${table.entityPath}EditForm input"); 
+		 if($('#${table.entityPath}EditForm #editStatus').attr("disabled")==undefined){	 
+			 inputs.each(function(){
+				 $(this).attr("disabled",true);
+			 });
+			 $('#${table.entityPath}EditForm #editStatus').attr("disabled",true);
+		 }else{
+			 inputs.each(function(){
+				 $(this).removeAttr("disabled");
+			 });
+			 $('#${table.entityPath}EditForm #editStatus').removeAttr("disabled");
+		 } 
+	}
+	
+	function disableInputs() {
+		var inputs = $("#${table.entityPath}EditForm input");
+		 inputs.each(function(){
+		    $(this).attr("disabled", true);   //遍历得到的每一个jquery对象		   
+		 });
+		 $('#${table.entityPath}EditForm #editStatus').attr("disabled",true);
+	}
+	
+	function enableInputs() {
+		var inputs = $("#${table.entityPath}EditForm input");
+		 inputs.each(function(){
+		    $(this).attr("disabled", false);   //遍历得到的每一个jquery对象		   
+		 }); 
+		 $('#${table.entityPath}EditForm #editStatus').removeAttr("disabled");
+	}
+	
+	
+	$(document).ready(function (){
+		//disableInputs();
+	});
+	
+</script>
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false" title="" style="overflow: auto;padding: 3px;">
+        <form id="${table.entityPath}EditForm" method="post">
+            <table class="grid">
+              #foreach($field in ${table.fields})		 
+		         <tr>
+                    <td>${field.propertyName}</td>
+                    <td><input name="${field.propertyName}" type="text" class="easyui-textbox"  data-options="required:true" value="${${table.entityPath}.${field.propertyName}}"></td>
+                </tr> 
+		    #end   
+		     <tr>
+                    <td colspan="2"  align="center">
+                       <a id="btnSubmit"  href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fi-x-circle',plain:true" onclick="${table.entityPath}EditSubmit();">保存</a> 
+                       <a id="btnEdit" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fi-x-circle',plain:true" onclick="toggleInputs();">编辑</a>  
+                    </td>
+                     
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>

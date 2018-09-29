@@ -1,0 +1,96 @@
+ 
+use it;
+
+/*
+	${table.entityPath}
+*/
+INSERT INTO  `resource`
+( 
+	`name`,
+	`url`,
+	`open_mode`,
+	`description`,
+	`icon`,
+	`pid`,
+	`seq`,
+	`status`,
+	`resource_type`,
+	`create_time`
+)
+select 
+    '${table.entityPath}'            `name`,
+	'/${table.entityPath}/manager'      `url`,
+	null                              `open_mode`,
+	'${table.entityPath}'               `description`,
+	'fi-refresh'                      `icon`,
+	'237'                             `pid`,
+	0                                 `seq`,
+	0                                 `status`,
+	0                                 `resource_type`,
+	sysdate()                  `create_time` from information_schema.tables  
+where not exists(select * from resource where name ='${table.entityPath}')
+limit 1
+;
+
+/*
+	${table.entityPath}Add
+*/
+INSERT INTO  `resource`
+( 
+	`name`,
+	`url`,
+	`open_mode`,
+	`description`,
+	`icon`,
+	`pid`,
+	`seq`,
+	`status`,
+	`resource_type`,
+	`create_time`
+)
+select 
+    '${table.entityPath}Add'            `name`,
+	'/${table.entityPath}/addPage'      `url`,
+	null                              `open_mode`,
+	'${table.entityPath}Add'               `description`,
+	'fi-refresh'                      `icon`,
+	'237'                             `pid`,
+	0                                 `seq`,
+	0                                 `status`,
+	0                                 `resource_type`,
+	sysdate()                  `create_time` from information_schema.tables  
+where not exists(select * from resource where name ='${table.entityPath}Add')
+limit 1
+;
+
+/*
+	${table.entityPath}Edit
+*/
+INSERT INTO  `resource`
+( 
+	`name`,
+	`url`,
+	`open_mode`,
+	`description`,
+	`icon`,
+	`pid`,
+	`seq`,
+	`status`,
+	`resource_type`,
+	`create_time`
+)
+select 
+    '${table.entityPath}Edit'            `name`,
+	'/${table.entityPath}/editPage?id=1'      `url`,
+	null                              `open_mode`,
+	'${table.entityPath}Edit'               `description`,
+	'fi-refresh'                      `icon`,
+	'237'                             `pid`,
+	0                                 `seq`,
+	0                                 `status`,
+	0                                 `resource_type`,
+	sysdate()                  `create_time` from information_schema.tables  
+where not exists(select * from resource where name ='${table.entityPath}Edit')
+limit 1
+;
+

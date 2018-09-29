@@ -1,0 +1,43 @@
+package ${package.Mapper};
+import java.util.List;
+
+import java.util.Map;
+import org.apache.ibatis.annotations.Param;
+
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.tup.model.${entity};
+//import com.tup.model.${entity}Example;
+import ${package.Entity}.${entity};
+import ${superMapperClassPackage};
+
+/**
+ * <p>
+ * Mapper接口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
+    //int countByExample(${entity}Example example);
+
+   // int deleteByExample(${entity}Example example);
+
+    Integer insert(${entity} record);
+
+    int insertSelective(${entity} record);
+    
+    
+    List<${entity}> selectByMapParam(Map<String,String> params);
+    
+    
+    List<${entity}> select${entity}List(Pagination page, @Param("sort") String sort, @Param("order") String order);
+    
+
+    //List<${entity}> selectByExample(${entity}Example example);
+
+    //int updateByExampleSelective(@Param("record") ${entity} record, @Param("example") ${entity}Example example);
+
+    //int updateByExample(@Param("record") ${entity} record, @Param("example") ${entity}Example example);
+}
