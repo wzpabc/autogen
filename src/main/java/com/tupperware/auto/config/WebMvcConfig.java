@@ -45,9 +45,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/css/**")
                 .addResourceLocations("classpath:/static/assets/css/");
 
-        registry.addResourceHandler("/fonts/**")
-                .addResourceLocations("classpath:/static/assets/fonts/");
-
         registry.addResourceHandler("/dark/**")
                 .addResourceLocations("classpath:/static/dark/");
 
