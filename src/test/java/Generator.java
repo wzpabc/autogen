@@ -3,6 +3,8 @@ import com.tupperware.auto.generator.InjectionConfig;
 import com.tupperware.auto.generator.config.*;
 import com.tupperware.auto.generator.config.rules.DbType;
 import com.tupperware.auto.generator.config.rules.NamingStrategy;
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.LogFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +21,7 @@ import java.util.Properties;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class Generator {
 
+    private static final Log logger = LogFactory.getLog(Generator.class);
     private  AutoGenerator mpg;
 
     private Properties props;
@@ -168,12 +171,14 @@ public class Generator {
             public void initMap() {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("abc", this.getConfig().getGlobalConfig().getAuthor() + "-mp");
+                map.put("dbtype", dsc.getDbType().toString().toLowerCase());
                 this.setMap(map);
             }
 
             public void initMap(String table) {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("abc", this.getConfig().getGlobalConfig().getAuthor() + "-mp");
+                map.put("dbtype", dsc.getDbType().toString().toLowerCase());
                 this.setMap(map);
             }
         };
@@ -199,16 +204,18 @@ public class Generator {
     @Test
     public void execute() {
         // 执行生成
-        mpg.execute();
+//        mpg.execute();
         // 打印注入设置
-        System.err.println(mpg.getCfg().getMap().get("abc"));
+        System.err.println(mpg.getCfg().getMap().get("dbtype"));
     }
     @Test
     public void clear() {
         // 执行生成
         mpg.clear();
         // 打印注入设置
-        System.err.println(mpg.getCfg().getMap().get("abc"));
+        logger.debug("==========================打印注入设置！！！==========================");
+        logger.debug(mpg.getCfg().getMap().get("dbtype").toString());
+        logger.debug("==========================打印注入设置！！！==========================");
     }
 
     private static Properties getProperties() {
