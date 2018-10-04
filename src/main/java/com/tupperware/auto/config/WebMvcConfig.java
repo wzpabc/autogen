@@ -33,29 +33,32 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
 
-        registry.addResourceHandler("/assets/**")
-                .addResourceLocations("classpath:/static/assets/");
-
-        registry.addResourceHandler("/scss/**")
-                .addResourceLocations("classpath:/static/assets/scss/");
-
-        registry.addResourceHandler("/js/**")
-                .addResourceLocations("classpath:/static/assets/js/");
-
-        registry.addResourceHandler("/css/**")
-                .addResourceLocations("classpath:/static/assets/css/");
-
-        registry.addResourceHandler("/dark/**")
-                .addResourceLocations("classpath:/static/dark/");
-
-        registry.addResourceHandler("/horizontal/**")
-                .addResourceLocations("classpath:/static/horizontal/");
-
-        registry.addResourceHandler("/material/**")
-                .addResourceLocations("classpath:/static/material/");
-
-        registry.addResourceHandler("/resources/**")
-                .addResourceLocations("/resources/")
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
+//
+//        registry.addResourceHandler("/assets/**")
+//                .addResourceLocations("classpath:/static/assets/");
+//
+//        registry.addResourceHandler("/scss/**")
+//                .addResourceLocations("classpath:/static/assets/scss/");
+//
+//        registry.addResourceHandler("/js/**")
+//                .addResourceLocations("classpath:/static/assets/js/");
+//
+//        registry.addResourceHandler("/css/**")
+//                .addResourceLocations("classpath:/static/assets/css/");
+//
+//        registry.addResourceHandler("/dark/**")
+//                .addResourceLocations("classpath:/static/dark/");
+//
+//        registry.addResourceHandler("/horizontal/**")
+//                .addResourceLocations("classpath:/static/horizontal/");
+//
+//        registry.addResourceHandler("/material/**")
+//                .addResourceLocations("classpath:/static/material/");
+//
+//        registry.addResourceHandler("/resources/**")
+//                .addResourceLocations("/resources/")
                 ;
 
 

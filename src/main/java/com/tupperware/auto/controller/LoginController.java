@@ -17,11 +17,19 @@ public class LoginController  {
     public String login() {
         return "admin/login";
     }
+
+    @RequestMapping(value = { "/logout" }, method = RequestMethod.GET)
+    public String logout() {
+        //clear session
+        return "admin/login";
+    }
+
     @RequestMapping(value = { "/index" }, method = RequestMethod.GET)
     public String index(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         request.setAttribute("ctx", request.getContextPath());
         return "admin/index";
     }
+
 
 }
