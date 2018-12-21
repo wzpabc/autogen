@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * </p>
  *
  * @author patrick.wang
- * @since 2018-09-29
+ * @since 2018-12-21
  */
 public interface ConfigControllerMapper extends BaseMapper<ConfigController> {
 

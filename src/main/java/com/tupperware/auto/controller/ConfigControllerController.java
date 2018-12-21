@@ -34,7 +34,7 @@ import springfox.documentation.annotations.ApiIgnore;
  *   前端控制器
  * </p>
  * @author patrick.wang
- * @since 2018-09-29
+ * @since 2018-12-21
  */
  
 @Api(description= "" ,tags={"configController"}) 
@@ -67,7 +67,6 @@ public class ConfigControllerController  extends CommonController<ConfigControll
 		datainfo.setCode(HttpServletResponse.SC_OK);
 		return datainfo; 		
 	} 
-
-
+	
 	
 } 

@@ -24,7 +24,7 @@ import java.util.Map;
  *   服务实现类
  * </p>
  * @author patrick.wang
- * @since 2018-09-29
+ * @since 2018-12-21
  */
 @Service
 public class ConfigControllerServiceImpl extends ServiceImpl<ConfigControllerMapper, ConfigController> implements IConfigControllerService {

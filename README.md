@@ -6,6 +6,11 @@
 
 `mvn test -Dtest=Generator`
 
+`mvn test -Dtest=Generator#clear`
+
+`mvn test -Dtest=Generator#execute`
+
+
 * classpath:template folder from gen
 * classpath:templates folder from UI
 

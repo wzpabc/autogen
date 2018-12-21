@@ -81,7 +81,7 @@
 				and year=${year}
 				and month=${month}
 				and week=${week}
-				and date=2018-09-29
+				and date=2018-12-21
 				and organtype=${organtype} -->
     </select>
     
