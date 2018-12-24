@@ -15,7 +15,7 @@ import java.util.Map;
  * </p>
  *
  * @author patrick.wang
- * @since 2018-12-21
+ * @since 2018-12-24
  */
 public interface IConfigControllerService extends IService<ConfigController> {
 	 
@@ -29,9 +29,15 @@ public interface IConfigControllerService extends IService<ConfigController> {
 			String organtype);
 	
 	void selectDataGrid(DataInfo dataInfo);
+
+	public List<ConfigController> list();
+
 	
 	ConfigController getTop1();
 	
 	public List<ConfigController> getMapParams(Map<String, String> params) ;
+
+
+	List<ConfigController> selectController(String table) ;
 	
 }

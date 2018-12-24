@@ -1,3 +1,4 @@
+package com.tupperware.auto.controller;
 import com.tupperware.auto.generator.AutoGenerator;
 import com.tupperware.auto.generator.InjectionConfig;
 import com.tupperware.auto.generator.config.*;
@@ -33,22 +34,45 @@ public class Generator {
     // 注入自定义配置，可以在 VM 中使用 cfg.abc 设置的值
     private InjectionConfig cfg;
     private TemplateConfig tc;
-
+    private StrategyConfig sc;
     private   String dbtype;
+
+    public Generator() {
+        props = getProperties();
+        dbtype=props.getProperty("generator.dbtype");
+    }
+
+    public InjectionConfig getCfg() {
+        return cfg;
+    }
+
+    public void setCfg(InjectionConfig cfg) {
+        this.cfg = cfg;
+    }
+
+    public StrategyConfig getSc() {
+        return sc;
+    }
+
+    public void setSc(StrategyConfig sc) {
+        this.sc = sc;
+    }
 
     @Before
     public void setProps() {
         props = getProperties();
         dbtype=props.getProperty("generator.dbtype");
+        sc=this.getStrategyConfig();
         setGlobalConfig();
         setDataSourceConfig();
         setPackageConfig();
         setInjectionConfig();
+
         setTemplateConfig();
         setAutoGenerator();
     }
 
-    private void setDataSourceConfig() {
+    public void setDataSourceConfig() {
         // 数据源配置
         dsc = new DataSourceConfig();
         if(dbtype.equals("MYSQL")){
@@ -78,7 +102,7 @@ public class Generator {
 
     }
 
-    private void setGlobalConfig() {
+    public void setGlobalConfig() {
         // 全局配置
         gc = new GlobalConfig();
 
@@ -108,7 +132,11 @@ public class Generator {
         StrategyConfig strategy = new StrategyConfig();
 //        strategy.setTablePrefix("bmd_");// 此处可以修改为您的表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-        strategy.setInclude(props.getProperty("generator.tables").split(",")); // 需要生成的表
+//        strategy.setInclude(props.getProperty("generator.tables").split(",")); // 需要生成的表
+       strategy.setExclude(String.valueOf("config_controller").split(",")); // 需要排除生成的表
+//
+    //    strategy.setInclude(String.valueOf("config_controller").split(",")); // 需要生成的表
+
 //        strategy.setInclude(new String[]{"auth_role_operation"}); // 需要生成的表
         // strategy.setExclude(new String[]{"test"
         // 字段名生成策略
@@ -151,20 +179,20 @@ public class Generator {
 
     }
 
-    private void setTemplateConfig() {
+    public void setTemplateConfig() {
 
         tc = new TemplateConfig();
         tc.setController("/template/controller.java.vm");
         tc.setEntity("/template/entity.java.vm");
         tc.setMapper("/template/mapper.java.vm");
-        tc.setXml("/template/mapper.xml.vm");
+        tc.setXml("/template/mapper.xml.mysql.vm");
         tc.setService("/template/service.java.vm");
         tc.setServiceImpl("/template/serviceImpl.java.vm");
         tc.setForm("/template/form.java.vm");
 
     }
 
-    private void setInjectionConfig() {
+    public void setInjectionConfig() {
         // 注入自定义配置，可以在 VM 中使用 cfg.abc 设置的值
         cfg = new InjectionConfig() {
             @Override
@@ -184,14 +212,15 @@ public class Generator {
         };
     }
 
-    private void setAutoGenerator(){
+    public AutoGenerator setAutoGenerator(){
+
         mpg = new AutoGenerator();
 
         mpg.setGlobalConfig(gc);
         // 数据源配置
         mpg.setDataSource(dsc);
         // 策略配置
-        mpg.setStrategy(getStrategyConfig());
+        mpg.setStrategy(sc);
         // 包配置
         mpg.setPackageInfo(pc);
 
@@ -200,6 +229,8 @@ public class Generator {
         mpg.setTemplate(tc);
         // 执行生成
         mpg.execute();
+
+        return mpg;
     }
     @Test
     public void execute() {
@@ -218,7 +249,7 @@ public class Generator {
         logger.debug("==========================打印注入设置！！！==========================");
     }
 
-    private static Properties getProperties() {
+    public static Properties getProperties() {
         // 读取配置文件
         Resource resource = new ClassPathResource("/application.properties");
         Properties _props = new Properties();

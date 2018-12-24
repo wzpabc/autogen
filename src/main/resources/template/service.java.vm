@@ -29,9 +29,20 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
 			String organtype);
 	
 	void selectDataGrid(DataInfo dataInfo);
+
+	public List<${entity}> list();
+
 	
 	${entity} getTop1();
 	
 	public List<${entity}> getMapParams(Map<String, String> params) ;
-	
+
+#foreach($controller in $cfg )
+	public List<${entity}>  ${controller.controller.functionName}(
+	#foreach($param in ${controller.params})
+            String ${param.name}${param.endfix} ${param.seperator}
+	#end
+        );
+
+#end
 }

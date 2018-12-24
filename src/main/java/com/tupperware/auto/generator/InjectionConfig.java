@@ -15,8 +15,10 @@
  */
 package com.tupperware.auto.generator;
 
+import java.util.List;
 import java.util.Map;
 
+import com.tupperware.auto.form.ControllerGenerator;
 import com.tupperware.auto.generator.config.builder.ConfigBuilder;
 
 /**
@@ -35,7 +37,7 @@ public abstract class InjectionConfig {
 	private ConfigBuilder config;
 	private Map<String, Object> map;
 	
-//	private List<ControllerGenerator> controller;
+	private List<ControllerGenerator> controller;
 
 	/**
 	 * 注入自定义 Map 对象
@@ -64,13 +66,13 @@ public abstract class InjectionConfig {
 		this.map = map;
 	}
 
-//	public List<ControllerGenerator> getController() {
-//		return controller;
-//	}
-//
-//	public void setController(List<ControllerGenerator> controller) {
-//		this.controller = controller;
-//	}
+	public List<ControllerGenerator> getController() {
+		return controller;
+	}
+
+	public void setController(List<ControllerGenerator> controller) {
+		this.controller = controller;
+	}
 
  
 	

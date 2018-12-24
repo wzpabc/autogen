@@ -127,7 +127,7 @@ public class AutoGenerator extends AbstractGenerator {
 		String superServiceClass = getSuperClassName(config.getSuperServiceClass());
 		String superServiceImplClass = getSuperClassName(config.getSuperServiceImplClass());
 		String superControllerClass = getSuperClassName(config.getSuperControllerClass());
-		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
 		for (TableInfo tableInfo : tableList) {
 			VelocityContext ctx = new VelocityContext();
@@ -136,7 +136,7 @@ public class AutoGenerator extends AbstractGenerator {
 				 * 注入自定义配置
 				 */
 				cfg.initMap(tableInfo.getName());
-//				ctx.put("cfg", cfg.getController());
+				ctx.put("cfg", cfg.getController());
 			}
 			ctx.put("package", packageInfo);
 			ctx.put("author", config.getGlobalConfig().getAuthor());

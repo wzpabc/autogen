@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * </p>
  *
  * @author patrick.wang
- * @since 2018-12-21
+ * @since 2018-12-24
  */
 public interface ConfigControllerMapper extends BaseMapper<ConfigController> {
 
@@ -27,4 +27,6 @@ public interface ConfigControllerMapper extends BaseMapper<ConfigController> {
     
    	List<ConfigController>  getByFilter(@Param("organno")  String organno, @Param("year")  String year, @Param("month")  String month, @Param("week") String week, @Param("date") String date,
 			@Param("organtype") String organtype);
+
+    List<ConfigController> selectController(@Param("tbl") String tbl);
 }

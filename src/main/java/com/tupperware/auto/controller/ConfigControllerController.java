@@ -34,16 +34,17 @@ import springfox.documentation.annotations.ApiIgnore;
  *   前端控制器
  * </p>
  * @author patrick.wang
- * @since 2018-12-21
+ * @since 2018-12-24
  */
  
-@Api(description= "" ,tags={"configController"}) 
+@Api(description= "" ,tags={"configController"})
+@ApiIgnore
 @RestController
 @RequestMapping("/configController")
 public class ConfigControllerController  extends CommonController<ConfigController>{
 	
 	private static Logger logger = Logger.getLogger(ConfigControllerController.class);
-	
+
 	@Autowired private IConfigControllerService configControllerService;
 	@ApiOperation(value = "表头", notes = "表头",produces="application/json")
 	@RequestMapping(value = "/header", method = RequestMethod.GET)
@@ -52,6 +53,15 @@ public class ConfigControllerController  extends CommonController<ConfigControll
 		return ConfigControllerHelper.getHeader();
 	}
 
+	@ApiIgnore
+	@ApiOperation(value = "List")
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ResponseBody
+	public List<ConfigController> list(){
+			return configControllerService.list();
+	}
+
+	@ApiIgnore
 	@ApiOperation(value = "查询", notes = "按表头中列出的字段名等值过滤,不支持日期过滤", response = DataInfo.class,produces="application/json")
 	@ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input", response = DataInfo.class) })
 	   @RequestMapping(value="/query", method = RequestMethod.POST)

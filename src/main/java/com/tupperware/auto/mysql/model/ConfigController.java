@@ -15,7 +15,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author patrick.wang
- * @since 2018-12-21
+ * @since 2018-12-24
  */
 @TableName("config_controller")
 public class ConfigController extends Model<ConfigController> {

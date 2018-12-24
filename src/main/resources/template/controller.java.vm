@@ -2,6 +2,7 @@ package ${package.Controller};
 
 import com.tupperware.auto.form.${entity}Helper;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.tupperware.auto.commons.base.CommonController;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +109,13 @@ public class ${table.controllerName}  extends CommonController<${entity}>{
 		return ${entity}Helper.getHeader();
 	}
 
+	@ApiOperation(value = "List")
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ResponseBody
+	public List<${entity}> list(){
+			return ${table.entityPath}Service.list();
+	}
+
 	@ApiOperation(value = "查询", notes = "按表头中列出的字段名等值过滤,不支持日期过滤", response = DataInfo.class,produces="application/json")
 	@ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input", response = DataInfo.class) })
 	   @RequestMapping(value="/query", method = RequestMethod.POST)
@@ -134,7 +142,7 @@ public class ${table.controllerName}  extends CommonController<${entity}>{
 #if( ${controller.controller.auth}==1)
 
  	@ApiImplicitParams({
-		@ApiImplicitParam(name = "authorization", value = "authorization", required = ${controller.controller.require}, dataType = "string", paramType = "header")
+		@ApiImplicitParam(name = "authorization", value = "authorization", required = ${controller.controller.required}, dataType = "string", paramType = "header")
    })  	
 #end
 
@@ -145,32 +153,25 @@ public class ${table.controllerName}  extends CommonController<${entity}>{
     @RequestMapping(value = "/${controller.controller.requestPath}", method = RequestMethod.${controller.controller.requestMethod})
     public DataInfo ${controller.controller.functionName}( 
 #foreach($param in ${controller.params})
-         @RequestParam(value = "${param.name}${param.endfix}", required = ${controller.controller.require})String ${param.name}${param.endfix} ${param.seperator} 
+         @RequestParam(value = "${param.name}${param.endfix}", required = ${controller.controller.required})String ${param.name}${param.endfix} ${param.seperator}
 #end    
 	) {		
 #if(${controller.controller.construct}=="yes")
 		DataInfo datainfo = new DataInfo( ${controller.paramData});
 #else
 		DataInfo datainfo = new DataInfo("","","");
-#end		
-		EntityWrapper<${entity}> ew = new EntityWrapper<>();
-		ew.setEntity(new ${entity}());
-#foreach($param in ${controller.params})
-        ew.and("${param.column} ${param.operator} {0}", ${param.name}${param.endfix}); //${param.value}
 #end
-#if(${controller.orderColumn}!=""&&${controller.orderColumn})
-		ew.orderBy("${controller.orderColumn}");
-#end
-
-		logger.info(ew.getSqlSegment());
-		
-		List<${entity}> list= ${table.entityPath}Service.selectList(ew);	
+		List<${entity}> list= ${table.entityPath}Service.${controller.controller.functionName}(
+	#foreach($param in ${controller.params})
+  				 ${param.name}${param.endfix} ${param.seperator}
+	#end
+        ) ;
 		datainfo.setTotal(list.size());
 		datainfo.setMessage("${controller.controller.apiValue}");
 		datainfo.setRows(list);
 		datainfo.setStatus(true);
 		datainfo.setCode(HttpServletResponse.SC_OK);		
-		datainfo.setSqlSegment(ew.getSqlSegment()); 
+		//datainfo.setSqlSegment(ew.getSqlSegment());
 		logger.info(datainfo.toString());
 		
 		return datainfo; 	 

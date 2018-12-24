@@ -24,7 +24,7 @@ import java.util.Map;
  *   服务实现类
  * </p>
  * @author patrick.wang
- * @since 2018-12-21
+ * @since 2018-12-24
  */
 @Service
 public class ConfigControllerServiceImpl extends ServiceImpl<ConfigControllerMapper, ConfigController> implements IConfigControllerService {
@@ -92,8 +92,20 @@ public class ConfigControllerServiceImpl extends ServiceImpl<ConfigControllerMap
 		 return mapper.selectList(wrapper); 
 	}
 
+	public List<ConfigController> list() {
+        EntityWrapper wrapper=new EntityWrapper();
+        wrapper.setEntity(new ConfigController());
+        return mapper.selectList(wrapper);
+	}
+
+
 	@Override
 	public void selectDataGrid(DataInfo dataInfo) {
 		// TODO Auto-generated method stub 
+	}
+
+	public List<ConfigController> selectController(String table){
+
+		return mapper.selectController(table);
 	}
 }

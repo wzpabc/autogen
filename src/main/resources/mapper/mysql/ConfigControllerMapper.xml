@@ -2,88 +2,92 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tupperware.auto.mysql.mapper.ConfigControllerMapper">
 
-	<!-- 通用查询映射结果 -->
-	<resultMap id="BaseResultMap" type="com.tupperware.auto.mysql.model.ConfigController">
-		<result column="id" property="id" /> 
-		<result column="group_id" property="groupId" /> 
-		<result column="table_schema" property="tableSchema" /> 
-		<result column="table_name" property="tableName" /> 
-		<result column="table_type" property="tableType" /> 
-		<result column="table_desc" property="tableDesc" /> 
-		<result column="api_value" property="apiValue" /> 
-		<result column="notes" property="notes" /> 
-		<result column="flag" property="flag" /> 
-		<result column="producers" property="producers" /> 
-		<result column="required" property="required" /> 
-		<result column="isdisabled" property="isdisabled" /> 
-		<result column="construct" property="construct" /> 
-		<result column="ignored" property="ignored" /> 
-		<result column="request_path" property="requestPath" /> 
-		<result column="request_method" property="requestMethod" /> 
-		<result column="function_name" property="functionName" /> 
-		<result column="query" property="query" /> 
-		<result column="auth" property="auth" /> 
-		<result column="update_date" property="updateDate" /> 
-	</resultMap>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tupperware.auto.mysql.model.ConfigController">
+        <result column="id" property="id"/>
+        <result column="group_id" property="groupId"/>
+        <result column="table_schema" property="tableSchema"/>
+        <result column="table_name" property="tableName"/>
+        <result column="table_type" property="tableType"/>
+        <result column="table_desc" property="tableDesc"/>
+        <result column="api_value" property="apiValue"/>
+        <result column="notes" property="notes"/>
+        <result column="flag" property="flag"/>
+        <result column="producers" property="producers"/>
+        <result column="required" property="required"/>
+        <result column="isdisabled" property="isdisabled"/>
+        <result column="construct" property="construct"/>
+        <result column="ignored" property="ignored"/>
+        <result column="request_path" property="requestPath"/>
+        <result column="request_method" property="requestMethod"/>
+        <result column="function_name" property="functionName"/>
+        <result column="query" property="query"/>
+        <result column="auth" property="auth"/>
+        <result column="update_date" property="updateDate"/>
+    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, group_id AS groupId, table_schema AS tableSchema, table_name AS tableName, table_type AS tableType, table_desc AS tableDesc, api_value AS apiValue, notes, flag, producers, required, isdisabled, construct, ignored, request_path AS requestPath, request_method AS requestMethod, function_name AS functionName, query, auth, update_date AS updateDate
     </sql>
-    
-    
 
-<select id="selectByMapParam" resultMap="BaseResultMap" parameterType="Map" >
-    select  
-    	<include refid="Base_Column_List" />
-   	 from dbo.config_controller WHERE 1=1     
-    	 <if test="id != null" > and  id = #{id,jdbcType=INT(11)} </if> 
-		 <if test="groupId != null" > and  group_id = #{groupId,jdbcType=VARCHAR(10)} </if> 
-		 <if test="tableSchema != null" > and  table_schema = #{tableSchema,jdbcType=VARCHAR(300)} </if> 
-		 <if test="tableName != null" > and  table_name = #{tableName,jdbcType=VARCHAR(150)} </if> 
-		 <if test="tableType != null" > and  table_type = #{tableType,jdbcType=VARCHAR(50)} </if> 
-		 <if test="tableDesc != null" > and  table_desc = #{tableDesc,jdbcType=VARCHAR(160)} </if> 
-		 <if test="apiValue != null" > and  api_value = #{apiValue,jdbcType=VARCHAR(120)} </if> 
-		 <if test="notes != null" > and  notes = #{notes,jdbcType=VARCHAR(1000)} </if> 
-		 <if test="flag != null" > and  flag = #{flag,jdbcType=VARCHAR(100)} </if> 
-		 <if test="producers != null" > and  producers = #{producers,jdbcType=VARCHAR(160)} </if> 
-		 <if test="required != null" > and  required = #{required,jdbcType=VARCHAR(11)} </if> 
-		 <if test="isdisabled != null" > and  isdisabled = #{isdisabled,jdbcType=INT(11)} </if> 
-		 <if test="construct != null" > and  construct = #{construct,jdbcType=VARCHAR(11)} </if> 
-		 <if test="ignored != null" > and  ignored = #{ignored,jdbcType=INT(11)} </if> 
-		 <if test="requestPath != null" > and  request_path = #{requestPath,jdbcType=VARCHAR(110)} </if> 
-		 <if test="requestMethod != null" > and  request_method = #{requestMethod,jdbcType=VARCHAR(40)} </if> 
-		 <if test="functionName != null" > and  function_name = #{functionName,jdbcType=VARCHAR(110)} </if> 
-		 <if test="query != null" > and  query = #{query,jdbcType=VARCHAR(4000)} </if> 
-		 <if test="auth != null" > and  auth = #{auth,jdbcType=INT(11)} </if> 
-		 <if test="updateDate != null" > and  update_date = #{updateDate,jdbcType=TIMESTAMP} </if> 
-	  </select>
-  
-  <select id="selectConfigControllerList" resultType="ConfigController">
+
+    <select id="selectByMapParam" resultMap="BaseResultMap" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from dbo.config_controller WHERE 1=1
+        <if test="id != null">and id = #{id,jdbcType=INT(11)}</if>
+        <if test="groupId != null">and group_id = #{groupId,jdbcType=VARCHAR(10)}</if>
+        <if test="tableSchema != null">and table_schema = #{tableSchema,jdbcType=VARCHAR(300)}</if>
+        <if test="tableName != null">and table_name = #{tableName,jdbcType=VARCHAR(150)}</if>
+        <if test="tableType != null">and table_type = #{tableType,jdbcType=VARCHAR(50)}</if>
+        <if test="tableDesc != null">and table_desc = #{tableDesc,jdbcType=VARCHAR(160)}</if>
+        <if test="apiValue != null">and api_value = #{apiValue,jdbcType=VARCHAR(120)}</if>
+        <if test="notes != null">and notes = #{notes,jdbcType=VARCHAR(1000)}</if>
+        <if test="flag != null">and flag = #{flag,jdbcType=VARCHAR(100)}</if>
+        <if test="producers != null">and producers = #{producers,jdbcType=VARCHAR(160)}</if>
+        <if test="required != null">and required = #{required,jdbcType=VARCHAR(11)}</if>
+        <if test="isdisabled != null">and isdisabled = #{isdisabled,jdbcType=INT(11)}</if>
+        <if test="construct != null">and construct = #{construct,jdbcType=VARCHAR(11)}</if>
+        <if test="ignored != null">and ignored = #{ignored,jdbcType=INT(11)}</if>
+        <if test="requestPath != null">and request_path = #{requestPath,jdbcType=VARCHAR(110)}</if>
+        <if test="requestMethod != null">and request_method = #{requestMethod,jdbcType=VARCHAR(40)}</if>
+        <if test="functionName != null">and function_name = #{functionName,jdbcType=VARCHAR(110)}</if>
+        <if test="query != null">and query = #{query,jdbcType=VARCHAR(4000)}</if>
+        <if test="auth != null">and auth = #{auth,jdbcType=INT(11)}</if>
+        <if test="updateDate != null">and update_date = #{updateDate,jdbcType=TIMESTAMP}</if>
+    </select>
+
+    <select id="selectConfigControllerList" resultType="ConfigController">
         select
         <include refid="Base_Column_List"/>
         from dbo.config_controller
         order by ${sort} ${order}
     </select>
-    
+
     <select id="selectTopConfigController" resultType="ConfigController">
-        select top ${n} 
+        select top ${n}
         <include refid="Base_Column_List"/>
         from dbo.config_controller
     </select>
-    
+
     <select id="getByFilter" resultType="ConfigController">
-        select top 1 
+        select top 1
         <include refid="Base_Column_List"/>
-        from dbo.config_controller 
+        from dbo.config_controller
         where 1=1
         <!--    and organno=${organno}
 				and year=${year}
 				and month=${month}
 				and week=${week}
-				and date=2018-12-21
+				and date=2018-12-24
 				and organtype=${organtype} -->
     </select>
-    
+    <select id="selectController" resultType="ConfigController">
+        select
+        <include refid="Base_Column_List"/>
+        from config_controller
+        where table_name='${tbl}' and ifnull( `isdisabled` ,0)=0
+    </select>
 </mapper>
  
