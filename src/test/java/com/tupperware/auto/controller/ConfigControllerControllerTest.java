@@ -1,4 +1,5 @@
 package com.tupperware.auto.controller;
+
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.parser.ParserException;
@@ -61,6 +62,15 @@ public class ConfigControllerControllerTest {
         System.out.println(configControllerService.list().size());
     }
 
+
+    public String[] getController() {
+        Set<String> set = new HashSet<>();
+        for (ConfigController c : service.list()) {
+            set.add(c.getTableName());
+        }
+        return set.toArray(new String[set.size()]);
+    }
+
     public static String sql2notes(String sql) {
         String result_lcase = null;
         try {
@@ -88,7 +98,8 @@ public class ConfigControllerControllerTest {
         StrategyConfig strategy = new StrategyConfig();
         //strategy.setTablePrefix("bmd_");// 此处可以修改为您的表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-        strategy.setExclude(String.valueOf("config_controller").split(",")); // 需要排除生成的表
+        //strategy.setExclude(String.valueOf("config_controller").split(",")); // 需要排除生成的表
+        strategy.setInclude(getController());
         // 字段名生成策略
         strategy.setFieldNaming(NamingStrategy.underline_to_camel);
         return strategy;
@@ -168,7 +179,7 @@ public class ConfigControllerControllerTest {
             }
             logger.info(String.format("===============%s================", "return"));
 
-            logger.info(String.format("===============%s================",generator.toString()));
+            logger.info(String.format("===============%s================", generator.toString()));
             return generator;
         }
         return null;
@@ -177,9 +188,12 @@ public class ConfigControllerControllerTest {
     @Test
     public void execute() {
         // 执行生成
-//        mpg.execute();
-        // 打印注入设置
-        System.err.println(mpg.getCfg().getMap().get("dbtype"));
+       mpg.execute();
+    }
+    @Test
+    public void clear() {
+        // 执行生成
+        mpg.clear();
     }
 
 

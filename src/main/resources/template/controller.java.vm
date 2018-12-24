@@ -177,6 +177,41 @@ public class ${table.controllerName}  extends CommonController<${entity}>{
 		return datainfo; 	 
     }
    
-    #end  
-	
-} 
+    #end
+
+
+
+#foreach($controller in $cfg )
+
+/** ${controller.controller.notes}
+ * @param ${controller.paramStr}
+ * @return DataInfo
+ * @see DataInfo
+ */
+	#if( ${controller.controller.auth}==1)
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "authorization", required = ${controller.controller.required}, dataType = "string", paramType = "header")
+    })
+	#end
+
+	#if( ${controller.controller.ignore}==1)
+    @ApiIgnore
+	#end
+	@ApiOperation(value = "${controller.controller.apiValue}列表",tags={$!{controller.controller.flag}}, notes = "${controller.h1}${controller.controller.notes}列表  \n${controller.h1}参数:  \n${controller.paramValue}  \n ${controller.h1}查询${controller.controller.id}:  \n${controller.plaintext}",produces="${controller.controller.producers}")
+	@RequestMapping(value = "/${controller.controller.requestPath}_list", method = RequestMethod.${controller.controller.requestMethod})
+	@ResponseBody
+	public  List<${entity}>  ${controller.controller.functionName}_list(
+	#foreach($param in ${controller.params})
+    @RequestParam(value = "${param.name}${param.endfix}", required = ${controller.controller.required})String ${param.name}${param.endfix} ${param.seperator}
+	#end
+		) {
+				return ${table.entityPath}Service.${controller.controller.functionName}(
+					#foreach($param in ${controller.params})
+						${param.name}${param.endfix} ${param.seperator}
+					#end
+				) ;
+	}
+
+#end
+}

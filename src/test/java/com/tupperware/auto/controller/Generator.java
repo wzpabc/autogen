@@ -235,7 +235,7 @@ public class Generator {
     @Test
     public void execute() {
         // 执行生成
-//        mpg.execute();
+        mpg.execute();
         // 打印注入设置
         System.err.println(mpg.getCfg().getMap().get("dbtype"));
     }
