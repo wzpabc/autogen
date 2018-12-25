@@ -64,7 +64,7 @@ public class ConfigControllerController  extends CommonController<ConfigControll
 	@ApiIgnore
 	@ApiOperation(value = "查询", notes = "按表头中列出的字段名等值过滤,不支持日期过滤", response = DataInfo.class,produces="application/json")
 	@ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input", response = DataInfo.class) })
-	   @RequestMapping(value="/query", method = RequestMethod.POST)
+    @RequestMapping(value="/query", method = RequestMethod.POST)
 	@ResponseBody
 	public DataInfo query(HttpServletRequest request){
 		Map<String, String> map = WebUtils.Requst2Map(request);
