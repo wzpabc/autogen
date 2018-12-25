@@ -1,6 +1,6 @@
 #!/bin/bash
-#git clone https://github.com/wzpabc/autogen.git
-#cd autogen
+git clone https://github.com/wzpabc/autogen.git
+cd autogen
 mysql -uroot -proot superset < ./src/main/resources/sql/mysql_config_controller.sql
 mvn clean
 mvn test -Dtest=com.tupperware.auto.controller.ConfigControllerControllerTest#clear

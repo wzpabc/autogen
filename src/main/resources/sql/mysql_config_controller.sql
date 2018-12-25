@@ -22,28 +22,36 @@
 DROP TABLE IF EXISTS `config_controller`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `config_controller` (
-  `id` int(11) DEFAULT NULL,
-  `group_id` varchar(10) NOT NULL,
-  `table_schema` varchar(300) DEFAULT NULL,
-  `table_name` varchar(150) DEFAULT NULL,
-  `table_type` varchar(50) DEFAULT NULL,
-  `table_desc` varchar(160) DEFAULT NULL,
-  `api_value` varchar(120) DEFAULT NULL,
-  `notes` varchar(1000) NOT NULL,
-  `flag` varchar(100) NOT NULL,
-  `producers` varchar(160) DEFAULT NULL,
-  `required` varchar(11) NOT NULL,
-  `isdisabled` int(11) NOT NULL,
-  `construct` varchar(11) NOT NULL,
-  `ignored` int(11) DEFAULT NULL,
-  `request_path` varchar(110) DEFAULT NULL,
-  `request_method` varchar(40) DEFAULT NULL,
-  `function_name` varchar(110) DEFAULT NULL,
-  `query` varchar(4000) NOT NULL,
-  `auth` int(11) DEFAULT NULL,
-  `update_date` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create table config_controller
+(
+  id             int auto_increment,
+  group_id       varchar(30)   not null,
+  table_schema   varchar(300)  null,
+  table_name     varchar(150)  null,
+  table_type     varchar(50)   null,
+  table_desc     varchar(160)  null,
+  api_value      varchar(120)  null,
+  notes          varchar(1000) not null,
+  flag           varchar(100)  not null,
+  producers      varchar(160)  null,
+  required       varchar(11)   not null,
+  isdisabled     int           not null,
+  construct      varchar(11)   not null,
+  ignored        int           null,
+  request_path   varchar(110)  null,
+  request_method varchar(40)   null,
+  function_name  varchar(110)  null,
+  query          varchar(4000) not null,
+  auth           int           null,
+  update_date    datetime      null,
+  constraint config_controller_pk
+  unique (id)
+);
+
+alter table config_controller
+  add primary key (id);
+
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,9 +60,54 @@ CREATE TABLE `config_controller` (
 
 LOCK TABLES `config_controller` WRITE;
 /*!40000 ALTER TABLE `config_controller` DISABLE KEYS */;
-INSERT INTO `config_controller` VALUES
-(1,'01','gen_mysql','anl_v_kpi_status_rpt','table','达标情况','达标情况','达标情况','\"A).Tag System\"','application/json','true',0,'no',0,'getkpi','GET','getkpi','SELECT row_id,year,month,flag_year_month,date_type,organ_no,organ_name,organ_type,kpi,kpi_desc,true_amt,diff_amt,plan_amt,pre_amt,create_datetime,update_datetime  FROM anl_v_kpi_status_rpt where  organ_no=\'00\' and year=2018 and month=12 and organ_type=\'TUP\'',0,'2018-04-17 15:35:48')
-,(2,'01','gen_mysql','anl_v_kpi_status_rpt','table','达标情况','达标情况','达标情况','\"A).Tag System\"','application/json','true',0,'no',0,'getkpi1','GET','getkpi1','SELECT row_id,year,month,flag_year_month,date_type,organ_no,organ_name,organ_type,kpi,kpi_desc,true_amt,diff_amt,plan_amt,pre_amt,create_datetime,update_datetime  FROM anl_v_kpi_status_rpt where  organ_no=\'00\' and year=2018 and month=12 and organ_type=\'TUP\' and date_type=\'季达标\'',0,'2018-04-17 15:35:48')
+
+insert into config_controller(
+    group_id,
+    table_schema,
+    table_name,
+    table_type,
+    table_desc,
+    api_value,
+    notes,
+    flag,
+    producers,
+    required,
+    isdisabled,
+    construct,
+    ignored,
+    request_path,
+    request_method,
+    function_name,
+    query,
+    auth,
+    update_date)
+
+SELECT
+       t.name `group_id`,
+       database() table_schema,
+       t.name table_name,
+       'table' table_type,
+       t.name table_desc,
+       t.name api_value,
+       t.name notes,
+       concat('\"',t.name,'\"')flag,
+       'application/json' producers,
+       'true' required,
+       0 isdisabled,
+       'no' construct,
+       0 ignored,
+       i.name request_path,
+       'GET'request_method,
+       i.name function_name,
+       concat('select * from ',t.name,' where ',GROUP_CONCAT(concat(f.name,'=\'\'') ORDER BY f.pos  separator ' and ') ) query,
+       0 auth,
+       CURRENT_TIMESTAMP() update_date
+FROM information_schema.innodb_sys_tables t
+       JOIN information_schema.innodb_sys_indexes i USING (table_id)
+       JOIN information_schema.innodb_sys_fields f USING (index_id)
+WHERE t.schema = database() and t.name<>'config_controller'
+  and i.name<>'PRIMARY'
+GROUP BY t.name,i.name limit 2
 ;
 
 /*!40000 ALTER TABLE `config_controller` ENABLE KEYS */;
