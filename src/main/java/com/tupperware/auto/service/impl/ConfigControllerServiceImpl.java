@@ -67,17 +67,7 @@ public class ConfigControllerServiceImpl extends ServiceImpl<ConfigControllerMap
 	
 	public void selectDataGrid(PageInfo pageInfo) {
 	     	EntityWrapper<ConfigController> wrapper=new EntityWrapper<ConfigController> ();
-	   		/*此处写查询条件
-	   		   EntityWrapper ew=new EntityWrapper();
-		       ew.setEntity(new User());
-		       String name="wang";
-		       Integer age=16;
-		       ew.where("name = {0}",name).andNew("age > {0}",age).orderBy("age");
-		       List<User> list = userService.selectList(ew);
-		       Page page2 = userService.selectPage(page, ew);
-	   		*/
-	   		
-	        Page<ConfigController> page = new Page<ConfigController>(pageInfo.getNowpage(), pageInfo.getSize());
+	     	Page<ConfigController> page = new Page<ConfigController>(pageInfo.getNowpage(), pageInfo.getSize());
 	        List<ConfigController> list = mapper.selectConfigControllerList(page, pageInfo.getSort(), pageInfo.getOrder());
 	        pageInfo.setRows(list); 
 	        pageInfo.setTotal(mapper.selectCount(wrapper)); 
@@ -95,6 +85,7 @@ public class ConfigControllerServiceImpl extends ServiceImpl<ConfigControllerMap
 	public List<ConfigController> list() {
         EntityWrapper wrapper=new EntityWrapper();
         wrapper.setEntity(new ConfigController());
+        wrapper.where("isdisabled={0}",0);
         return mapper.selectList(wrapper);
 	}
 

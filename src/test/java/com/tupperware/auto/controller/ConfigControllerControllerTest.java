@@ -76,7 +76,7 @@ public class ConfigControllerControllerTest {
         try {
             result_lcase = SQLUtils.format(sql, JdbcConstants.MYSQL, SQLUtils.DEFAULT_LCASE_FORMAT_OPTION);
         } catch (Exception e) {
-            // TODO: handle exception
+            // TODO: handle except
         }
         result_lcase = (null == result_lcase ? sql : result_lcase);
         return Pattern.compile("\n|\r").matcher(result_lcase).replaceAll("  \\\\n");
@@ -171,6 +171,7 @@ public class ConfigControllerControllerTest {
                 List<OrderbyHelper> order = new ArrayList<>();
                 while (orderit.hasNext()) {
                     Column cl = orderit.next();
+
                     order.add(new OrderbyHelper(cl.getName(), " asc "));
                 }
                 generator = new ControllerGenerator(helper, select, config, order);
@@ -188,8 +189,9 @@ public class ConfigControllerControllerTest {
     @Test
     public void execute() {
         // 执行生成
-       mpg.execute();
+        mpg.execute();
     }
+
     @Test
     public void clear() {
         // 执行生成

@@ -1,13 +1,12 @@
 package com.tupperware.auto.form;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.alibaba.druid.sql.SQLUtils;
+import com.alibaba.druid.util.JdbcConstants;
+import com.tupperware.auto.mysql.model.ConfigController;
+
+import java.util.*;
 import java.util.regex.Pattern;
 
-import com.tupperware.auto.mysql.model.ConfigController;
 public class ControllerGenerator {
 
     private List<ConditionHelper> params;
@@ -31,8 +30,7 @@ public class ControllerGenerator {
 
     private String plaintext;
 
-    private String h1="###";
-
+    private String h1 = "###";
 
 
     public String getH1() {
@@ -48,13 +46,24 @@ public class ControllerGenerator {
     }
 
     public void setPlaintext() {
-       // this.plaintext = GeneratorController.sql2notes(controller.getQuery());
+        this.plaintext = sql2notes(controller.getQuery());
     }
 
     private static String format(String str) {
         return Pattern.compile("\\s+").matcher(Pattern.compile("\\t|\r|\n").matcher(str).replaceAll(" "))
                 .replaceAll(" ");
 
+    }
+
+    public static String sql2notes(String sql) {
+        String result_lcase = null;
+        try {
+            result_lcase = SQLUtils.format(sql, JdbcConstants.MYSQL, SQLUtils.DEFAULT_LCASE_FORMAT_OPTION);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        result_lcase = (null == result_lcase ? sql : result_lcase);
+        return Pattern.compile("\n|\r").matcher(result_lcase).replaceAll("  \\\\n").replaceAll("<", "&lt;");
     }
 
     public String getQueryinline() {
@@ -76,6 +85,7 @@ public class ControllerGenerator {
             Iterator<OrderbyHelper> it = order.iterator();
             while (it.hasNext()) {
                 OrderbyHelper p = it.next();
+
                 this.orderColumn = this.orderColumn + String.format("%s%s", p.getName(), (it.hasNext() ? "," : ""));
             }
         }
@@ -87,7 +97,7 @@ public class ControllerGenerator {
     }
 
     public void setParamValue(List<ConditionHelper> params) {
-        Set<ConditionHelper> set= new HashSet<>();
+        Set<ConditionHelper> set = new HashSet<>();
         Iterator<ConditionHelper> it = params.iterator();
         while (it.hasNext()) {
             set.add(it.next());
@@ -98,7 +108,7 @@ public class ControllerGenerator {
             it = set.iterator();
             while (it.hasNext()) {
                 ConditionHelper p = it.next();
-                this.paramValue = this.paramValue + String.format("%s%s%s", p.getName(), p.getOperator().replaceAll("<", "&lt;"),p.getValue())
+                this.paramValue = this.paramValue + String.format("%s%s%s", p.getName(), p.getOperator().replaceAll("<", "&lt;"), p.getValue())
                         + (it.hasNext() ? "," : "");
             }
         }

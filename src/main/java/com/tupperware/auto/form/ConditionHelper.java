@@ -7,6 +7,7 @@ public class ConditionHelper {
 	private String name;
 	private String operator;
 	private String value;
+	private String strValue;
 	private String seperator = "";
 	private String endfix="";
 
@@ -41,6 +42,11 @@ public class ConditionHelper {
 
 	public void setValue(String value) {
 		this.value = value;
+		this.strValue=value;
+	}
+
+	public String getStrValue() {
+		return value.replaceAll("'","\"");
 	}
 
 	public String getSeperator() {

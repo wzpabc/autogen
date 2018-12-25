@@ -67,17 +67,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 	
 	public void selectDataGrid(PageInfo pageInfo) {
 	     	EntityWrapper<${entity}> wrapper=new EntityWrapper<${entity}> ();
-	   		/*此处写查询条件
-	   		   EntityWrapper ew=new EntityWrapper();
-		       ew.setEntity(new User());
-		       String name="wang";
-		       Integer age=16;
-		       ew.where("name = {0}",name).andNew("age > {0}",age).orderBy("age");
-		       List<User> list = userService.selectList(ew);
-		       Page page2 = userService.selectPage(page, ew);
-	   		*/
-	   		
-	        Page<${entity}> page = new Page<${entity}>(pageInfo.getNowpage(), pageInfo.getSize());
+	   		Page<${entity}> page = new Page<${entity}>(pageInfo.getNowpage(), pageInfo.getSize());
 	        List<${entity}> list = mapper.select${entity}List(page, pageInfo.getSort(), pageInfo.getOrder());
 	        pageInfo.setRows(list); 
 	        pageInfo.setTotal(mapper.selectCount(wrapper)); 
@@ -98,35 +88,31 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
         return mapper.selectList(wrapper);
 	}
 
-
-
-
 	@Override
 	public void selectDataGrid(DataInfo dataInfo) {
 		// TODO Auto-generated method stub 
 	}
 
-	//${date}
 #foreach($controller in $cfg )
-	public List<${entity}>  ${controller.controller.functionName}(
-	#foreach($param in ${controller.params})
-			String ${param.name}${param.endfix} ${param.seperator}
-	#end
-        ) {
+	/** ${controller.controller.notes}
+	 * @param ${controller.paramStr}
+	 * @return List<${entity}>
+	 * @see List<${entity}>
+	 * ${date}
+	 */
+	public List<${entity}>  ${controller.controller.functionName}(#foreach($param in ${controller.params})String ${param.name}${param.endfix} ${param.seperator}#end) {
         EntityWrapper<${entity}> wrapper = new EntityWrapper<>();
         wrapper.setEntity(new ${entity}());
 	#foreach($param in ${controller.params})
-            wrapper.and("${param.column} ${param.operator} {0}", ${param.name}${param.endfix}); //${param.value}
+    wrapper.and("${param.column} ${param.operator} {0}", ${param.name}${param.endfix}); //${param.value}
 	#end
 	#if(${controller.orderColumn}!=""&&${controller.orderColumn})
-            wrapper.orderBy("${controller.orderColumn}");
+wrapper.orderBy("${controller.orderColumn}");
 	#end
 
-        logger.info(wrapper.getSqlSegment());
-
+		logger.info(wrapper.getSqlSegment());
         return mapper.selectList(wrapper);
-
-        }
+    }
 
 #end
 
