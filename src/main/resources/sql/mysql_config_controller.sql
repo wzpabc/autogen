@@ -83,13 +83,13 @@ insert into config_controller(
     update_date)
 
 SELECT
-       t.name `group_id`,
+       concat('group','_',t.name) `group_id`,
        database() table_schema,
        t.name table_name,
        'table' table_type,
-       t.name table_desc,
-       t.name api_value,
-       t.name notes,
+       concat('desc','_',t.name) table_desc,
+       concat('api','_',t.name) api_value,
+       concat('notes','_',t.name) notes,
        concat('\"',t.name,'\"')flag,
        'application/json' producers,
        'true' required,
