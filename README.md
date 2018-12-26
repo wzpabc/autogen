@@ -12,8 +12,10 @@ pasering sql by alibaba druid and generate swagger api simply.
 change in install.sh and application.properties to piont to you mysql database
 
 * install.sh
+
 ![Image text](images/snapshot5.png)
 * application.properties 
+
 ![Image text](images/snapshot6.png)
 
 #### testing 
