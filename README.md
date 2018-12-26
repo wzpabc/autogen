@@ -31,6 +31,9 @@
 
 * classpath:template folder from gen
 * classpath:templates folder from UI
+![Image text](images/snapshot4.png)
+![Image text](images/snapshot5.png)
+![Image text](images/snapshot6.png)
 
 [点击前往谷歌搜索](https://www.google.com.hk/)
  

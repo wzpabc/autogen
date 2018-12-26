@@ -81,7 +81,7 @@ insert into config_controller(
     query,
     auth,
     update_date)
-
+/* mariadb
 SELECT
        concat('group','_',t.name) `group_id`,
        database() table_schema,
@@ -106,6 +106,35 @@ FROM information_schema.innodb_sys_tables t
        JOIN information_schema.innodb_sys_indexes i USING (table_id)
        JOIN information_schema.innodb_sys_fields f USING (index_id)
 WHERE t.schema = database() and t.name<>'config_controller'
+  and i.name<>'PRIMARY'
+GROUP BY t.name,i.name limit 2
+*/
+--- Server version: 5.6.39 MySQL Community Server (GPL)
+SELECT
+       concat('group','_', substring_index(t.name,'/',-1) ) `group_id`,
+       database() table_schema,
+        substring_index(t.name,'/',-1)  table_name,
+       'table' table_type,
+       concat('desc','_', substring_index(t.name,'/',-1) ) table_desc,
+       concat('api','_', substring_index(t.name,'/',-1) ) api_value,
+       concat('notes','_', substring_index(t.name,'/',-1) ) notes,
+       concat('\"', substring_index(t.name,'/',-1) ,'\"')flag,
+       'application/json' producers,
+       'true' required,
+       0 isdisabled,
+       'no' construct,
+       0 ignored,
+       i.name request_path,
+       'GET'request_method,
+       i.name function_name,
+       concat('select * from ', substring_index(t.name,'/',-1) ,' where ',GROUP_CONCAT(concat(f.name,'=\'\'') ORDER BY f.pos  separator ' and ') ) query,
+       0 auth,
+       CURRENT_TIMESTAMP() update_date
+FROM information_schema.innodb_sys_tables t
+	  JOIN information_schema.tables x on x.table_name=substring_index(t.name,'/',-1) and x.table_schema=substring_index(t.name,'/',1)
+       JOIN information_schema.innodb_sys_indexes i USING (table_id)
+       JOIN information_schema.innodb_sys_fields f USING (index_id)
+WHERE x.table_schema = database() and substring_index(t.name,'/',-1) <>'config_controller'
   and i.name<>'PRIMARY'
 GROUP BY t.name,i.name limit 2
 ;
