@@ -7,15 +7,20 @@ pasering sql by alibaba druid and generate swagger api simply.
 
 `chmod 755 ./install.sh`
 
-### first change the db connection in install.sh and application.properties to piont to you mysql database
+### first change the db connections 
+
+change in install.sh and application.properties to piont to you mysql database
 
 * install.sh
 ![Image text](images/snapshot5.png)
 * application.properties 
 ![Image text](images/snapshot6.png)
 
-#### testing sql below in your database, pick up the one works ,to make sure ./src/main/resources/sql/mysql_config_controller.sql is correct
+#### testing 
 
+sql below in your database, pick up the one works ,to make sure ./src/main/resources/sql/mysql_config_controller.sql is correct
+
+* for mariadb and mysql
 ```mysql
 ---Server version: 5.5.60-MariaDB MariaDB Server /mysql
 
@@ -47,6 +52,7 @@ WHERE t.schema = database() and t.name<>'config_controller'
 GROUP BY t.name,i.name limit 2
 ;
 ```
+* for mysql community
 ```mysql
 --- Server version: 5.6.39 MySQL Community Server (GPL)
 SELECT
