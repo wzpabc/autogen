@@ -69,8 +69,10 @@ public class AutoGenerator extends AbstractGenerator {
 		// 获取上下文
 		Map<String, VelocityContext> ctxData = analyzeData(config);
 		// 循环生成文件
+
 		for (Map.Entry<String, VelocityContext> ctx : ctxData.entrySet()) {
-			batchClear(ctx.getKey(), ctx.getValue());
+			if(ctx.getKey()!="ConfigController")
+				batchClear(ctx.getKey(), ctx.getValue());
 		}
 		logger.debug("==========================已清理！！！==========================");
 	}
