@@ -1,15 +1,15 @@
 # autogen
 pasering sql by alibaba druid and generate swagger api simply.
-### first get the source code
+### first, get the source code
 `git clone https://github.com/wzpabc/autogen.git`
 
 `cd autogen&&ls`
 
 `chmod 755 ./install.sh`
 
-### second change the db connections 
+### second,modify the db connections 
 
-change in install.sh and application.properties to piont to you mysql database
+modify the db connections from files install.sh and application.properties, piont to you mysql database
 
 * install.sh
 
@@ -18,9 +18,9 @@ change in install.sh and application.properties to piont to you mysql database
 
 ![Image text](images/snapshot6.png)
 
-#### then testing 
+#### then, testing 
 
-sql below in your database, pick up the one works ,to make sure ./src/main/resources/sql/mysql_config_controller.sql is correct
+pase the sql script below in your database, pick up the one works ,to make sure ./src/main/resources/sql/mysql_config_controller.sql is correct
 
 * for mariadb and mysql
 ```mysql
@@ -87,11 +87,37 @@ GROUP BY t.name,i.name limit 2
 ;
 ```
 
-### finally, run shell script under root rolder
+### finally, run shell script 
+
+locate to root folder of project then
 
 `./install.sh`
 
 ### demo
+
+### please know that
+
+also can modify data in table config_controller manually to make it more beautifull,
+
+clear it first.
+
+`mvn test -Dtest=com.tupperware.auto.controller.ConfigControllerControllerTest#clear`
+
+generate the api again when finish modification
+
+`mvn clean`
+
+`mvn test -Dtest=com.tupperware.auto.controller.ConfigControllerControllerTest#execute`
+
+`sleep 5`
+
+`mvn clean`
+
+`mvn package -Dmaven.test.skip=true`
+
+`ps aux | grep "autogen-1.0.1-RELEASE.jar" |grep -v grep| cut -c 9-15 | xargs kill -9 >/dev/null 2>&1`
+
+`nohup java -Xmx1024m -jar ./target/autogen-1.0.1-RELEASE.jar  >/dev/null 2>&1 &`
 
 ![Image text](images/snapshot7.png)
 
