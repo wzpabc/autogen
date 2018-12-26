@@ -1,13 +1,13 @@
 # autogen
 pasering sql by alibaba druid and generate swagger api simply.
-### get the source code
+### first get the source code
 `git clone https://github.com/wzpabc/autogen.git`
 
 `cd autogen&&ls`
 
 `chmod 755 ./install.sh`
 
-### first change the db connections 
+### second change the db connections 
 
 change in install.sh and application.properties to piont to you mysql database
 
@@ -18,7 +18,7 @@ change in install.sh and application.properties to piont to you mysql database
 
 ![Image text](images/snapshot6.png)
 
-#### testing 
+#### then testing 
 
 sql below in your database, pick up the one works ,to make sure ./src/main/resources/sql/mysql_config_controller.sql is correct
 
@@ -87,7 +87,7 @@ GROUP BY t.name,i.name limit 2
 ;
 ```
 
-### finally
+### finally, run shell script under root rolder
 
 `./install.sh`
 
