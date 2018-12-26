@@ -26,35 +26,35 @@ pase the sql script below in your database, pick up the one works ,to make sure 
 * for Server version: 5.5.60-MariaDB MariaDB Server or mysql(not community version)
 ```mysql
 SELECT
-concat('_group_',substring_index( t.name,'_',1)) `group_id`,
-database() table_schema,
-t.name table_name,
-'table' table_type,
-concat('desc','_',t.name) table_desc,
-concat('api','_',t.name) api_value,
-concat('notes','_',t.name) notes,
-concat('\"',t.name,'\"')flag,
-'application/json' producers,
-'true' required,
-0 isdisabled,
-'no' construct,
-0 ignored,
-i.name request_path,
-'GET'request_method,
-i.name function_name,
-concat('select * from ',t.name,' where ',GROUP_CONCAT(concat(f.name,'=\'\'') ORDER BY f.pos separator ' and ') ) query,
-case when i.name like '%uniq%' then 1 else 0 end isunique,
-0 auth,
-CURRENT_TIMESTAMP() update_date
+        concat('_group_',substring_index( t.name,'_',1)) `group_id`,
+        database() table_schema,
+        t.name table_name,
+        'table' table_type,
+        concat('desc','_',t.name) table_desc,
+        concat('api','_',t.name) api_value,
+        concat('notes','_',t.name) notes,
+        concat('\"',t.name,'\"')flag,
+        'application/json' producers,
+        'true' required,
+        0 isdisabled,
+        'no' construct,
+        0 ignored,
+        i.name request_path,
+        'GET'request_method,
+        i.name function_name,
+        concat('select * from ',t.name,' where ',GROUP_CONCAT(concat(f.name,'=\'\'') ORDER BY f.pos separator ' and ') ) query,
+        case when i.name like '%uniq%' then 1 else 0 end isunique,
+        0 auth,
+        CURRENT_TIMESTAMP() update_date
 FROM information_schema.innodb_sys_tables t
-JOIN information_schema.innodb_sys_indexes i USING (table_id)
-JOIN information_schema.innodb_sys_fields f USING (index_id)
+        JOIN information_schema.innodb_sys_indexes i USING (table_id)
+        JOIN information_schema.innodb_sys_fields f USING (index_id)
 WHERE t.schema = database()
-and t.name<>'config_controller'
-and i.name<>'PRIMARY'
-and i.name like 'idx%'
-and t.name like 'temp_test_autogen%'
-GROUP BY t.name,i.name limit 2
+        and t.name<>'config_controller'
+        and i.name<>'PRIMARY'
+        and i.name like 'idx%'
+        and t.name like 'temp_test_autogen%'
+        GROUP BY t.name,i.name limit 2
 ```
 * for Server version: 5.6.39 MySQL Community Server (GPL)
 
@@ -87,6 +87,8 @@ FROM information_schema.innodb_sys_tables t
        JOIN information_schema.innodb_sys_fields f USING (index_id)
 WHERE x.table_schema = database() and substring_index(t.name,'/',-1) <>'config_controller'
   and i.name<>'PRIMARY'
+  and i.name like 'idx%'
+  and substring_index(t.name,'/',-1) like 'temp_test_autogen%'
    /*and i.name   like 'idx%'*/
 GROUP BY t.name,i.name limit 10
 ;
