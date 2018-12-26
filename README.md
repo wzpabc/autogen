@@ -1,5 +1,6 @@
 # autogen
-pasering sql by alibaba druid and generate swagger api simply.
+pasering sql by alibaba druid and generate swagger api simply.by default records in table `config_controller` are generation by sql with index cloumns as conditions ,('') as default values
+each indexes will generate one relative record in table config_controller,and two api url neither in `Datainfo `format or `List<>` format.
 ### first, get the source code
 `git clone https://github.com/wzpabc/autogen.git`
 
@@ -22,10 +23,8 @@ modify the db connections from files install.sh and application.properties, pion
 
 pase the sql script below in your database, pick up the one works ,to make sure ./src/main/resources/sql/mysql_config_controller.sql is correct
 
-* for mariadb and mysql
+* for Server version: 5.5.60-MariaDB MariaDB Server or mysql(not community version)
 ```mysql
----Server version: 5.5.60-MariaDB MariaDB Server /mysql
-
 SELECT
        concat('group','_',t.name) `group_id`,
        database() table_schema,
@@ -54,9 +53,8 @@ WHERE t.schema = database() and t.name<>'config_controller'
 GROUP BY t.name,i.name limit 2
 ;
 ```
-* for mysql community
+* for Server version: 5.6.39 MySQL Community Server (GPL)
 ```mysql
---- Server version: 5.6.39 MySQL Community Server (GPL)
 SELECT
        concat('group','_', substring_index(t.name,'/',-1) ) `group_id`,
        database() table_schema,
@@ -94,6 +92,8 @@ locate to root folder of project then
 `./install.sh`
 
 ### demo
+
+`http://localhost:8085/auto/swagger-ui.html`
 
 ![Image text](images/snapshot7.png)
 
