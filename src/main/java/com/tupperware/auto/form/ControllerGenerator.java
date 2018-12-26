@@ -30,6 +30,9 @@ public class ControllerGenerator {
 
     private String plaintext;
 
+    private Integer isunique;
+
+
     private String h1 = "###";
 
 
@@ -192,6 +195,7 @@ public class ControllerGenerator {
         this.setParamValue(params);
         setQueryinline();
         setPlaintext();
+        setIsunique();
     }
 
     public ControllerGenerator(List<ConditionHelper> params, Map<String, String> select, ConfigController controller,
@@ -207,6 +211,7 @@ public class ControllerGenerator {
         this.setOrderColumn(order);
         setQueryinline();
         setPlaintext();
+        setIsunique();
     }
 
     @Override
@@ -216,4 +221,11 @@ public class ControllerGenerator {
                 + ", orderColumn=" + orderColumn + "]";
     }
 
+    public Integer getIsunique() {
+        return isunique;
+    }
+
+    public void setIsunique() {
+        this.isunique=controller.getIsunique();
+    }
 }

@@ -100,19 +100,38 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 	 * @see List<${entity}>
 	 * ${date}
 	 */
-	public List<${entity}>  ${controller.controller.functionName}(#foreach($param in ${controller.params})String ${param.name}${param.endfix} ${param.seperator}#end) {
-        EntityWrapper<${entity}> wrapper = new EntityWrapper<>();
-        wrapper.setEntity(new ${entity}());
-	#foreach($param in ${controller.params})
-    wrapper.and("${param.column} ${param.operator} {0}", ${param.name}${param.endfix}); //${param.value}
-	#end
-	#if(${controller.orderColumn}!=""&&${controller.orderColumn})
-wrapper.orderBy("${controller.orderColumn}");
+
+	#if(${controller.isunique}==1)
+    public ${entity}  ${controller.controller.functionName}(#foreach($param in ${controller.params})String ${param.name}${param.endfix} ${param.seperator}#end) {
+            EntityWrapper<${entity}> wrapper = new EntityWrapper<>();
+            wrapper.setEntity(new ${entity}());
+		#foreach($param in ${controller.params})
+                wrapper.and("${param.column} ${param.operator} {0}", ${param.name}${param.endfix}); //${param.value}
+		#end
+		#if(${controller.orderColumn}!=""&&${controller.orderColumn})
+                wrapper.orderBy("${controller.orderColumn}");
+		#end
+
+            logger.info(wrapper.getSqlSegment());
+            return mapper.selectList(wrapper).iterator().next();
+            }
+	#else
+    public List<${entity}>  ${controller.controller.functionName}(#foreach($param in ${controller.params})String ${param.name}${param.endfix} ${param.seperator}#end) {
+            EntityWrapper<${entity}> wrapper = new EntityWrapper<>();
+            wrapper.setEntity(new ${entity}());
+		#foreach($param in ${controller.params})
+                wrapper.and("${param.column} ${param.operator} {0}", ${param.name}${param.endfix}); //${param.value}
+		#end
+		#if(${controller.orderColumn}!=""&&${controller.orderColumn})
+                wrapper.orderBy("${controller.orderColumn}");
+		#end
+
+            logger.info(wrapper.getSqlSegment());
+            return mapper.selectList(wrapper);
+            }
 	#end
 
-		logger.info(wrapper.getSqlSegment());
-        return mapper.selectList(wrapper);
-    }
+
 
 #end
 

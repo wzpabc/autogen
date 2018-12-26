@@ -59,9 +59,10 @@ public class ${table.controllerName}  extends CommonController<${entity}>{
 	
 	private static Logger logger = Logger.getLogger(${table.controllerName}.class);
 	
-	@Autowired private ${table.serviceName} ${table.entityPath}Service;
+	@Autowired
+	private ${table.serviceName} ${table.entityPath}Service;
 #if(1==2)
-	@ApiIgnore 
+	@ApiIgnore
     @ApiOperation(value = "例子", notes = "返回测试数据",produces="application/json")
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
 	@ResponseBody
@@ -75,18 +76,18 @@ public class ${table.controllerName}  extends CommonController<${entity}>{
 		datainfo.setStatus(true);
 		datainfo.setCode(HttpServletResponse.SC_OK);
 		datainfo.setRows(list);
-		return datainfo; 	
+		return datainfo;
 	}
-	
+
 	@ApiIgnore
 	@ApiOperation(value = "下载", notes = "下载query中的结果",produces="application/json")
 	@RequestMapping(value="/download", method = RequestMethod.POST)
 	@ResponseBody
 	public void download(HttpServletRequest request){
-		Map<String, String> map = WebUtils.Requst2Map(request); 
+		Map<String, String> map = WebUtils.Requst2Map(request);
 		downloadExcel(${table.entityPath}Service.getMapParams(map),${entity}.class);
-	} 
-	
+	}
+
 	@ApiIgnore
 	@ApiOperation(value = "机构编码查询", notes = "按专卖店、分销商编码查询",produces="application/json")
 	@RequestMapping(value = "/query/{year}/{month}/{week}/{date}/{organtype}/{organno}", method = RequestMethod.POST)
@@ -100,7 +101,30 @@ public class ${table.controllerName}  extends CommonController<${entity}>{
 		datainfo.setStatus(true);
 		datainfo.setCode(HttpServletResponse.SC_OK);
 		return datainfo;
-	}	
+	}
+
+	@ApiOperation(value = "List")
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ResponseBody
+	public List<${entity}> list(){
+			return ${table.entityPath}Service.list();
+			}
+
+	@ApiOperation(value = "查询", notes = "按表头中列出的字段名等值过滤,不支持日期过滤", response = DataInfo.class,produces="application/json")
+	@ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input", response = DataInfo.class) })
+	@RequestMapping(value="/query", method = RequestMethod.POST)
+	@ResponseBody
+	public DataInfo query(HttpServletRequest request){
+			Map<String, String> map = WebUtils.Requst2Map(request);
+			DataInfo datainfo = new DataInfo(map.get("aban8"),  "", "");
+			List<${entity}> list=${table.entityPath}Service.getMapParams(map);
+			datainfo.setTotal(list.size());
+			datainfo.setMessage("${table.comment}");
+			datainfo.setRows(list);
+			datainfo.setStatus(true);
+			datainfo.setCode(HttpServletResponse.SC_OK);
+			return datainfo;
+			}
 #end
 	@ApiOperation(value = "表头", notes = "表头",produces="application/json")
 	@RequestMapping(value = "/header", method = RequestMethod.GET)
@@ -109,28 +133,6 @@ public class ${table.controllerName}  extends CommonController<${entity}>{
 		return ${entity}Helper.getHeader();
 	}
 
-	@ApiOperation(value = "List")
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	@ResponseBody
-	public List<${entity}> list(){
-			return ${table.entityPath}Service.list();
-	}
-
-	@ApiOperation(value = "查询", notes = "按表头中列出的字段名等值过滤,不支持日期过滤", response = DataInfo.class,produces="application/json")
-	@ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input", response = DataInfo.class) })
-    @RequestMapping(value="/query", method = RequestMethod.POST)
-	@ResponseBody
-	public DataInfo query(HttpServletRequest request){
-		Map<String, String> map = WebUtils.Requst2Map(request);
-		DataInfo datainfo = new DataInfo(map.get("aban8"),  "", "");
-		List<${entity}> list=${table.entityPath}Service.getMapParams(map);
-		datainfo.setTotal(list.size());
-		datainfo.setMessage("${table.comment}");
-		datainfo.setRows(list);		
-		datainfo.setStatus(true);
-		datainfo.setCode(HttpServletResponse.SC_OK);
-		return datainfo; 		
-	}
 #foreach($controller in $cfg )      
 	
     /** ${controller.controller.notes}
@@ -156,7 +158,13 @@ public class ${table.controllerName}  extends CommonController<${entity}>{
 #else
 		DataInfo datainfo = new DataInfo("","","");
 #end
+#if(${controller.isunique}==1)
+		List<${entity}> list= new ArrayList<${entity}>();
+		list.add(${table.entityPath}Service.${controller.controller.functionName}(#foreach($param in ${controller.params})${param.name}${param.endfix} ${param.seperator}#end));
+#else
+
 		List<${entity}> list= ${table.entityPath}Service.${controller.controller.functionName}(#foreach($param in ${controller.params})${param.name}${param.endfix} ${param.seperator}#end) ;
+#end
 		datainfo.setTotal(list.size());
 		datainfo.setMessage("${controller.controller.apiValue}");
 		datainfo.setRows(list);
@@ -172,8 +180,6 @@ public class ${table.controllerName}  extends CommonController<${entity}>{
 
     /** ${controller.controller.notes}
      * @param ${controller.paramStr}
-     * @return List<${entity}>
-     * @see List<${entity}>
      * ${date}
      */
 	#if( ${controller.controller.auth}==1)
@@ -186,13 +192,26 @@ public class ${table.controllerName}  extends CommonController<${entity}>{
 	#if( ${controller.controller.ignore}==1)
     @ApiIgnore
 	#end
+	#if(${controller.isunique}==1)
 
-	@ApiOperation(value = "${controller.controller.apiValue}列表",tags={$!{controller.controller.flag}}, notes = "${controller.h1}${controller.controller.notes}列表  \n${controller.h1}参数:  \n${controller.paramValue}  \n ${controller.h1}查询${controller.controller.id}:  \n${controller.plaintext}",produces="${controller.controller.producers}")
-	@RequestMapping(value = "/${controller.controller.requestPath}_list", method = RequestMethod.${controller.controller.requestMethod})
-	@ResponseBody
-	public  List<${entity}>  ${controller.controller.functionName}_list(#foreach($param in ${controller.params})@RequestParam(value = "${param.name}${param.endfix}", required = ${controller.controller.required} ,defaultValue = ${param.strValue})String ${param.name}${param.endfix} ${param.seperator}#end){
-				return ${table.entityPath}Service.${controller.controller.functionName}(#foreach($param in ${controller.params})${param.name}${param.endfix} ${param.seperator}#end) ;
-	}
+    @ApiOperation(value = "${controller.controller.apiValue}对象",tags={$!{controller.controller.flag}}, notes = "${controller.h1}${controller.controller.notes}对象  \n${controller.h1}参数:  \n${controller.paramValue}  \n ${controller.h1}查询${controller.controller.id}:  \n${controller.plaintext}",produces="${controller.controller.producers}")
+    @RequestMapping(value = "/${controller.controller.requestPath}_obj", method = RequestMethod.${controller.controller.requestMethod})
+    @ResponseBody
+
+    public  ${entity}  ${controller.controller.functionName}_obj(#foreach($param in ${controller.params})@RequestParam(value = "${param.name}${param.endfix}", required = ${controller.controller.required} ,defaultValue = ${param.strValue})String ${param.name}${param.endfix} ${param.seperator}#end){
+            return ${table.entityPath}Service.${controller.controller.functionName}(#foreach($param in ${controller.params})${param.name}${param.endfix} ${param.seperator}#end) ;
+            }
+	#else
+
+    @ApiOperation(value = "${controller.controller.apiValue}列表",tags={$!{controller.controller.flag}}, notes = "${controller.h1}${controller.controller.notes}列表  \n${controller.h1}参数:  \n${controller.paramValue}  \n ${controller.h1}查询${controller.controller.id}:  \n${controller.plaintext}",produces="${controller.controller.producers}")
+    @RequestMapping(value = "/${controller.controller.requestPath}_list", method = RequestMethod.${controller.controller.requestMethod})
+    @ResponseBody
+
+    public  List<${entity}>  ${controller.controller.functionName}_list(#foreach($param in ${controller.params})@RequestParam(value = "${param.name}${param.endfix}", required = ${controller.controller.required} ,defaultValue = ${param.strValue})String ${param.name}${param.endfix} ${param.seperator}#end){
+            return ${table.entityPath}Service.${controller.controller.functionName}(#foreach($param in ${controller.params})${param.name}${param.endfix} ${param.seperator}#end) ;
+    }
+	#end
+
 
 #end
 }

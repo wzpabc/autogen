@@ -157,6 +157,13 @@ public class ConfigController extends Model<ConfigController> {
 	@JsonProperty
 	private String query;
 	/**
+	 * 属性: isunique
+	 * 备注:
+	 * 字段: isunique
+	 */
+	@JsonProperty
+	private Integer isunique;
+	/**
      * 属性: auth
      * 备注: 
      * 字段: auth
@@ -425,6 +432,15 @@ public class ConfigController extends Model<ConfigController> {
 	public void setQuery(String query) {
 		this.query = query;
 	}
+
+	public Integer getIsunique() {
+		return isunique;
+	}
+
+	public void setIsunique(Integer isunique) {
+		this.isunique = isunique;
+	}
+
 	/**
 	 * 获取 
 	 */

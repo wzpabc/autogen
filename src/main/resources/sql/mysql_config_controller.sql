@@ -42,6 +42,7 @@ create table config_controller
   request_method varchar(40)   null comment '请求方法:GET/POST...',
   function_name  varchar(110)  null comment '方法名',
   query          varchar(4000) not null comment '查询语句',
+  isunique           int           null comment '查询节果唯一:0/1',
   auth           int           null comment '是否要授权访问:0/1',
   update_date    datetime      null  comment '更新时间',
   constraint config_controller_pk
@@ -51,6 +52,21 @@ create table config_controller
 alter table config_controller
   add primary key (id);
 
+DROP TABLE IF EXISTS `temp_test_autogen_unique`;
+
+create table temp_test_autogen_unique
+as
+select `table_schema`,`table_name` from information_schema.tables limit 5;
+
+DROP TABLE IF EXISTS `temp_test_autogen_list`;
+
+create table temp_test_autogen_list
+as
+select `table_schema`,`table_name` from information_schema.tables limit 5;
+
+
+create index idx_unique_i on temp_test_autogen_unique(`table_schema`,`table_name` );
+create index idx_i on temp_test_autogen_list(`table_schema`,`table_name` );
 
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -79,66 +95,41 @@ insert into config_controller(
     request_method,
     function_name,
     query,
+    isunique,
     auth,
     update_date)
-/* mariadb
-SELECT
-       concat('group','_',t.name) `group_id`,
-       database() table_schema,
-       t.name table_name,
-       'table' table_type,
-       concat('desc','_',t.name) table_desc,
-       concat('api','_',t.name) api_value,
-       concat('notes','_',t.name) notes,
-       concat('\"',t.name,'\"')flag,
-       'application/json' producers,
-       'true' required,
-       0 isdisabled,
-       'no' construct,
-       0 ignored,
-       i.name request_path,
-       'GET'request_method,
-       i.name function_name,
-       concat('select * from ',t.name,' where ',GROUP_CONCAT(concat(f.name,'=\'\'') ORDER BY f.pos  separator ' and ') ) query,
-       0 auth,
-       CURRENT_TIMESTAMP() update_date
+   SELECT
+concat('_group_',substring_index( t.name,'_',1)) `group_id`,
+database() table_schema,
+t.name table_name,
+'table' table_type,
+concat('desc','_',t.name) table_desc,
+concat('api','_',t.name) api_value,
+concat('notes','_',t.name) notes,
+concat('\"',t.name,'\"')flag,
+'application/json' producers,
+'true' required,
+0 isdisabled,
+'no' construct,
+0 ignored,
+i.name request_path,
+'GET'request_method,
+i.name function_name,
+concat('select * from ',t.name,' where ',GROUP_CONCAT(concat(f.name,'=\'\'') ORDER BY f.pos separator ' and ') ) query,
+case when i.name like '%uniq%' then 1 else 0 end isunique,
+0 auth,
+CURRENT_TIMESTAMP() update_date
 FROM information_schema.innodb_sys_tables t
-       JOIN information_schema.innodb_sys_indexes i USING (table_id)
-       JOIN information_schema.innodb_sys_fields f USING (index_id)
-WHERE t.schema = database() and t.name<>'config_controller'
-  and i.name<>'PRIMARY'
+JOIN information_schema.innodb_sys_indexes i USING (table_id)
+JOIN information_schema.innodb_sys_fields f USING (index_id)
+WHERE t.schema = database()
+and t.name<>'config_controller'
+and i.name<>'PRIMARY'
+and i.name like 'idx%'
+and t.name like 'temp_test_autogen%'
 GROUP BY t.name,i.name limit 2
-*/
-SELECT
-       concat('_group_', substring_index( substring_index(t.name,'/',-1) ,'_',1) ) `group_id`,
-       database() table_schema,
-        substring_index(t.name,'/',-1)  table_name,
-       'table' table_type,
-       concat('desc','_', substring_index(t.name,'/',-1) ) table_desc,
-       concat('api','_', substring_index(t.name,'/',-1) ) api_value,
-       concat('notes','_', substring_index(t.name,'/',-1) ) notes,
-       concat('\"', substring_index(t.name,'/',-1) ,'\"')flag,
-       'application/json' producers,
-       'true' required,
-       0 isdisabled,
-       'no' construct,
-       0 ignored,
-       i.name request_path,
-       'GET'request_method,
-       i.name function_name,
-       concat('select * from ', substring_index(t.name,'/',-1) ,' where ',GROUP_CONCAT(concat(f.name,'=\'\'') ORDER BY f.pos  separator ' and ') ) query,
-       0 auth,
-       CURRENT_TIMESTAMP() update_date
-FROM information_schema.innodb_sys_tables t
-	  JOIN information_schema.tables x on x.table_name=substring_index(t.name,'/',-1) and x.table_schema=substring_index(t.name,'/',1)
-       JOIN information_schema.innodb_sys_indexes i USING (table_id)
-       JOIN information_schema.innodb_sys_fields f USING (index_id)
-WHERE x.table_schema = database() and substring_index(t.name,'/',-1) <>'config_controller'
-  and i.name<>'PRIMARY'
-   /**/and i.name   like 'idx%'
-GROUP BY t.name,i.name limit 100
-
 ;
+
 
 /*!40000 ALTER TABLE `config_controller` ENABLE KEYS */;
 UNLOCK TABLES;

@@ -1,7 +1,7 @@
 #!/bin/bash
 #git clone https://github.com/wzpabc/autogen.git
 #cd autogen
-mysql -h192.168.10.175 -uroot -p12345 ambari < ./src/main/resources/sql/mysql_config_controller.sql
+mysql -uroot -proot gen_mysql < ./src/main/resources/sql/mysql_config_controller.sql
 mvn clean
 mvn test -Dtest=com.tupperware.auto.controller.ConfigControllerControllerTest#clear
 mvn test -Dtest=com.tupperware.auto.controller.ConfigControllerControllerTest#execute

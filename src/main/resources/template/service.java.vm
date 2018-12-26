@@ -38,11 +38,18 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
 	public List<${entity}> getMapParams(Map<String, String> params) ;
 
 #foreach($controller in $cfg )
+	#if(${controller.isunique}==1)
+
+	public ${entity}  ${controller.controller.functionName}(
+	#else
+
 	public List<${entity}>  ${controller.controller.functionName}(
+	#end
+
 	#foreach($param in ${controller.params})
             String ${param.name}${param.endfix} ${param.seperator}
 	#end
-        );
+     );
 
 #end
 }
