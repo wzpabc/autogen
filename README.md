@@ -130,6 +130,24 @@ also can modify table config_controller manually to make it more beautifull,
 
 `nohup java -Xmx1024m -jar ./target/autogen-1.0.1-RELEASE.jar  >/dev/null 2>&1 &`
 
+```bash
+#!/bin/bash
+git clone https://github.com/wzpabc/autogen.git
+cd autogen
+mysql -uroot -proot gen_mysql < ./src/main/resources/sql/mysql_config_controller.sql
+mvn clean
+mvn test -Dtest=com.tupperware.auto.controller.ConfigControllerControllerTest#clear
+mvn test -Dtest=com.tupperware.auto.controller.ConfigControllerControllerTest#execute
+sleep 5
+mvn clean
+mvn package -Dmaven.test.skip=true
+ps aux | grep "autogen-1.0.1-RELEASE.jar" |grep -v grep| cut -c 9-15 | xargs kill -9 >/dev/null 2>&1
+echo killing
+sleep 5
+nohup java -Xmx1024m -jar ./target/autogen-1.0.1-RELEASE.jar  >/dev/null 2>&1 &
+echo start
 
+
+```
 [点击前往谷歌搜索](https://www.google.com.hk/)
  
