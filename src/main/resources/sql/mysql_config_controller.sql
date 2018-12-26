@@ -24,26 +24,26 @@ DROP TABLE IF EXISTS `config_controller`;
 /*!40101 SET character_set_client = utf8 */;
 create table config_controller
 (
-  id             int auto_increment,
-  group_id       varchar(30)   not null,
-  table_schema   varchar(300)  null,
-  table_name     varchar(150)  null,
-  table_type     varchar(50)   null,
-  table_desc     varchar(160)  null,
-  api_value      varchar(120)  null,
-  notes          varchar(1000) not null,
-  flag           varchar(100)  not null,
-  producers      varchar(160)  null,
-  required       varchar(11)   not null,
-  isdisabled     int           not null,
-  construct      varchar(11)   not null,
-  ignored        int           null,
-  request_path   varchar(110)  null,
-  request_method varchar(40)   null,
-  function_name  varchar(110)  null,
-  query          varchar(4000) not null,
-  auth           int           null,
-  update_date    datetime      null,
+  id             int auto_increment comment '主键',
+  group_id       varchar(30)   not null  comment '组',
+  table_schema   varchar(300)  null comment '数据库',
+  table_name     varchar(150)  null comment '表名字',
+  table_type     varchar(50)   null comment '表类型',
+  table_desc     varchar(160)  null comment '备注',
+  api_value      varchar(120)  null comment '接口',
+  notes          varchar(1000) not null comment '详情',
+  flag           varchar(100)  not null comment '标记',
+  producers      varchar(160)  null comment '类型',
+  required       varchar(11)   not null comment '要求权限',
+  isdisabled     int           not null comment '是否禁用',
+  construct      varchar(11)   not null comment '是否生成构造函数yes/no',
+  ignored        int           null comment '是否在API中忽略',
+  request_path   varchar(110)  null comment '请求路径',
+  request_method varchar(40)   null comment '请求方法:GET/POST...',
+  function_name  varchar(110)  null comment '方法名',
+  query          varchar(4000) not null comment '查询语句',
+  auth           int           null comment '是否要授权访问:0/1',
+  update_date    datetime      null  comment '更新时间',
   constraint config_controller_pk
   unique (id)
 );
@@ -110,7 +110,7 @@ WHERE t.schema = database() and t.name<>'config_controller'
 GROUP BY t.name,i.name limit 2
 */
 SELECT
-       concat('group','_', substring_index(t.name,'/',-1) ) `group_id`,
+       concat('_group_', substring_index( substring_index(t.name,'/',-1) ,'_',1) ) `group_id`,
        database() table_schema,
         substring_index(t.name,'/',-1)  table_name,
        'table' table_type,
@@ -135,7 +135,8 @@ FROM information_schema.innodb_sys_tables t
        JOIN information_schema.innodb_sys_fields f USING (index_id)
 WHERE x.table_schema = database() and substring_index(t.name,'/',-1) <>'config_controller'
   and i.name<>'PRIMARY'
-GROUP BY t.name,i.name limit 10
+   /**/and i.name   like 'idx%'
+GROUP BY t.name,i.name limit 100
 
 ;
 

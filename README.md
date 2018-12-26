@@ -26,7 +26,7 @@ pase the sql script below in your database, pick up the one works ,to make sure 
 * for Server version: 5.5.60-MariaDB MariaDB Server or mysql(not community version)
 ```mysql
 SELECT
-       concat('group','_',t.name) `group_id`,
+       concat('_group_',substring_index( t.name,'_',1)) `group_id`,
        database() table_schema,
        t.name table_name,
        'table' table_type,
@@ -50,13 +50,16 @@ FROM information_schema.innodb_sys_tables t
        JOIN information_schema.innodb_sys_fields f USING (index_id)
 WHERE t.schema = database() and t.name<>'config_controller'
   and i.name<>'PRIMARY'
+  /*and i.name   like 'idx%'*/
 GROUP BY t.name,i.name limit 2
 ;
 ```
 * for Server version: 5.6.39 MySQL Community Server (GPL)
+
+please select those indexes that make sense by changing the where condition clause , such as `and i.name   like 'idx%'`
 ```mysql
 SELECT
-       concat('group','_', substring_index(t.name,'/',-1) ) `group_id`,
+       concat('_group_', substring_index( substring_index(t.name,'/',-1) ,'_',1) ) `group_id`,
        database() table_schema,
         substring_index(t.name,'/',-1)  table_name,
        'table' table_type,
@@ -81,7 +84,8 @@ FROM information_schema.innodb_sys_tables t
        JOIN information_schema.innodb_sys_fields f USING (index_id)
 WHERE x.table_schema = database() and substring_index(t.name,'/',-1) <>'config_controller'
   and i.name<>'PRIMARY'
-GROUP BY t.name,i.name limit 2
+   /*and i.name   like 'idx%'*/
+GROUP BY t.name,i.name limit 100
 ;
 ```
 
@@ -101,7 +105,7 @@ locate to root folder of project then
 
 also can modify table config_controller manually to make it more beautifull,
 
-* clear it first. `source code in github already clean`.
+* clear it first. ` source code in github already clean`.
 
 `mvn test -Dtest=com.tupperware.auto.controller.ConfigControllerControllerTest#clear`
 

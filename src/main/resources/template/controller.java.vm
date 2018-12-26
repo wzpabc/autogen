@@ -42,7 +42,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 #foreach($controller in $cfg )
 #if(${velocityCount}==1)
-@Api(description= "${controller.controller.tableDesc}" ,tags={"${controller.controller.groupId}.${table.entityPath}"}) 
+@Api(description= "${controller.controller.tableDesc}" ,tags={"${controller.controller.groupId}"})
 #end    
 #end
 #else
