@@ -101,7 +101,7 @@ locate to root folder of project then
 
 also can modify table config_controller manually to make it more beautifull,
 
-* clear it first.
+* clear it first. `source code in github already clean`.
 
 `mvn test -Dtest=com.tupperware.auto.controller.ConfigControllerControllerTest#clear`
 
