@@ -109,7 +109,6 @@ WHERE t.schema = database() and t.name<>'config_controller'
   and i.name<>'PRIMARY'
 GROUP BY t.name,i.name limit 2
 */
---- Server version: 5.6.39 MySQL Community Server (GPL)
 SELECT
        concat('group','_', substring_index(t.name,'/',-1) ) `group_id`,
        database() table_schema,
@@ -136,7 +135,8 @@ FROM information_schema.innodb_sys_tables t
        JOIN information_schema.innodb_sys_fields f USING (index_id)
 WHERE x.table_schema = database() and substring_index(t.name,'/',-1) <>'config_controller'
   and i.name<>'PRIMARY'
-GROUP BY t.name,i.name limit 2
+GROUP BY t.name,i.name limit 10
+
 ;
 
 /*!40000 ALTER TABLE `config_controller` ENABLE KEYS */;

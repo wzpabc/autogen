@@ -1,39 +1,21 @@
 # autogen
-### first crete database in mysql 
-* create database gen_mysql
-#### import sql script into gen_mysql
-* step 0 
+pasering sql by alibaba druid and generate swagger api simply.
+### get the source code
+`git clone https://github.com/wzpabc/autogen.git`
 
-`generate mysql_config_controller.sql`
-* step 1. 
+`cd autogen&&ls`
 
-`mysql -uroot -proot gen_mysql < mysql_config_controller.sql
-`
+`chmod 755 ./install.sh`
 
-* step 2 .
+### first change the db connection in install.sh and application.properties to piont to you mysql database
 
-`mvn test -Dtest=com.tupperware.auto.controller.ConfigControllerControllerTest#clear`  
-
-`mvn test -Dtest=com.tupperware.auto.controller.ConfigControllerControllerTest#execute`  
-
-
-* step 3 .
-
-`mvn test -Dtest=com.tupperware.auto.controller.ConfigControllerControllerTest#testFormatSql`  
-
-* step 4 package .
-
-`mvn package -D maven.test.skip=true`
-
-* step 5 start
-
-`java -jar ./target/autogen-1.0.1-RELEASE.jar `
-
-* classpath:template folder from gen
-* classpath:templates folder from UI
-![Image text](images/snapshot4.png)
+* install.sh
 ![Image text](images/snapshot5.png)
+* application.properties 
 ![Image text](images/snapshot6.png)
+
+#### testing sql below in your database, pick up the one works ,to make sure ./src/main/resources/sql/mysql_config_controller.sql is correct
+
 ```mysql
 ---Server version: 5.5.60-MariaDB MariaDB Server /mysql
 
@@ -96,5 +78,14 @@ WHERE x.table_schema = database() and substring_index(t.name,'/',-1) <>'config_c
 GROUP BY t.name,i.name limit 2
 ;
 ```
+
+### finally
+
+`./install.sh`
+
+### demo
+
+![Image text](images/snapshot7.png)
+
 [点击前往谷歌搜索](https://www.google.com.hk/)
  
