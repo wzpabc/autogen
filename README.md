@@ -95,9 +95,11 @@ locate to root folder of project then
 
 ### demo
 
-### please know that
+![Image text](images/snapshot7.png)
 
-also can modify data in table config_controller manually to make it more beautifull,
+# Please know that
+
+also can modify table config_controller manually to make it more beautifull,
 
 clear it first.
 
@@ -119,7 +121,6 @@ generate the api again when finish modification
 
 `nohup java -Xmx1024m -jar ./target/autogen-1.0.1-RELEASE.jar  >/dev/null 2>&1 &`
 
-![Image text](images/snapshot7.png)
 
 [点击前往谷歌搜索](https://www.google.com.hk/)
  
